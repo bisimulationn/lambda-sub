@@ -9,6 +9,7 @@
     "html": "https://arxiv.org/html/2312.13270v1"
   },
   "milestones": [
+    "M0",
     "M1",
     "M2"
   ],
@@ -357,6 +358,142 @@
       ]
     },
     {
+      "id": "par_red1_iff",
+      "label": "par_red1_iff",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Parallel.v",
+      "depends": []
+    },
+    {
+      "id": "red1_in_par",
+      "label": "red1_in_par",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Parallel.v",
+      "depends": []
+    },
+    {
+      "id": "par_context",
+      "label": "par_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Parallel.v",
+      "depends": []
+    },
+    {
+      "id": "par_to_red1_or_eq",
+      "label": "par_to_red1_or_eq",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Parallel.v",
+      "depends": [
+        "par_red1_iff"
+      ]
+    },
+    {
+      "id": "red1_or_eq_to_par",
+      "label": "red1_or_eq_to_par",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Parallel.v",
+      "depends": [
+        "par_red1_iff"
+      ]
+    },
+    {
+      "id": "par_reflexive",
+      "label": "par_reflexive",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Parallel.v",
+      "depends": []
+    },
+    {
+      "id": "gen_list_length",
+      "label": "gen_list_length",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Random.v",
+      "depends": []
+    },
+    {
+      "id": "check_term_true",
+      "label": "check_term_true",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Random.v",
+      "depends": [
+        "has_red_spec",
+        "steps_sound_red1"
+      ]
+    },
+    {
+      "id": "check_all_true",
+      "label": "check_all_true",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Random.v",
+      "depends": [
+        "check_term_true"
+      ]
+    },
+    {
+      "id": "gen_sound",
+      "label": "gen_sound",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Random.v",
+      "depends": [
+        "steps_sound"
+      ]
+    },
+    {
+      "id": "gen_complete",
+      "label": "gen_complete",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Random.v",
+      "depends": [
+        "steps_complete"
+      ]
+    },
+    {
+      "id": "gen_fv_preserved",
+      "label": "gen_fv_preserved",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Random.v",
+      "depends": [
+        "lemma_2_1_fv_preserved",
+        "steps_sound_red1"
+      ]
+    },
+    {
       "id": "zdecs_sound",
       "label": "zdecs_sound",
       "kind": "infra",
@@ -537,6 +674,219 @@
       "file": "theory/Reduction.v",
       "depends": [
         "has_red_spec"
+      ]
+    },
+    {
+      "id": "open_rec_app",
+      "label": "open_rec_app",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "open_rec_lam",
+      "label": "open_rec_lam",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "open_rec_esub",
+      "label": "open_rec_esub",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "close_rec_app",
+      "label": "close_rec_app",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "close_rec_lam",
+      "label": "close_rec_lam",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "close_rec_esub",
+      "label": "close_rec_esub",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "subst_app",
+      "label": "subst_app",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "subst_lam",
+      "label": "subst_lam",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "subst_esub",
+      "label": "subst_esub",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "subst_notin",
+      "label": "subst_notin",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": [
+        "close_rec_notin",
+        "open_rec_occurs_false"
+      ]
+    },
+    {
+      "id": "subst_lc_self",
+      "label": "subst_lc_self",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": [
+        "subst_fvar_self"
+      ]
+    },
+    {
+      "id": "subst_other",
+      "label": "subst_other",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": [
+        "subst_fvar_other"
+      ]
+    },
+    {
+      "id": "red_sub_root_to_red1",
+      "label": "red_sub_root_to_red1",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
+      "id": "red_sub_to_red1",
+      "label": "red_sub_to_red1",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "red_sub_root_to_red1"
+      ]
+    },
+    {
+      "id": "red_sub_context",
+      "label": "red_sub_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
+      "id": "red_sub_gc",
+      "label": "red_sub_gc",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
+      "id": "red_sub_r",
+      "label": "red_sub_r",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
+      "id": "occurs_zfill",
+      "label": "occurs_zfill",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
+      "id": "zfill_occurs0",
+      "label": "zfill_occurs0",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "occurs_zfill"
+      ]
+    },
+    {
+      "id": "R_Gc_disjoint",
+      "label": "R_Gc_disjoint",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "zfill_occurs0"
       ]
     },
     {
