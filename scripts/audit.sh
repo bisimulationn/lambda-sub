@@ -35,7 +35,7 @@ done < <(find theory -name '*.v' -print0 2>/dev/null)
 echo "== Print Assumptions =="
 WORK="$(mktemp -d ./.audit-work.XXXXXX)"
 cp theory/*.v "$WORK"/
-for f in ExecReducer Binding Reduction Metatheory Tests; do
+for f in ExecReducer Binding Reduction Metatheory Subsystem Tests; do
   echo "-- $f"
   out="$(rocq compile -Q "$WORK" LambdaSub "$WORK/$f.v" 2>&1 || true)"
   echo "$out"
