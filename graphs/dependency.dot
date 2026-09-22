@@ -78,6 +78,11 @@ digraph theorem_deps {
   Es_refl_any [label="Es_refl_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_refl_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Es_sym_any [label="Es_sym_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_sym_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Es_trans_any [label="Es_trans_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_trans_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  in_filter_neq [label="in_filter_neq", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="in_filter_neq theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  filter_neq_in [label="filter_neq_in", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="filter_neq_in theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  nplug_fv_mono [label="nplug_fv_mono", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nplug_fv_mono theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  nplug_fv_upper [label="nplug_fv_upper", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nplug_fv_upper theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  nred_core_fv [label="nred_core_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nred_core_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   par_red1_iff [label="par_red1_iff", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="par_red1_iff theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   red1_in_par [label="red1_in_par", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="red1_in_par theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   par_context [label="par_context", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="par_context theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
@@ -181,6 +186,14 @@ digraph theorem_deps {
   red1r_fv -> lemma_2_1_fv_preserved;
   Plus_red1_context -> lemma_2_3_beta_sim;
   lemma_2_2_full_comp -> lemma_2_3_beta_sim;
+  filter_neq_in -> nplug_fv_mono;
+  in_filter_neq -> nplug_fv_mono;
+  filter_neq_in -> nplug_fv_upper;
+  in_filter_neq -> nplug_fv_upper;
+  filter_neq_in -> nred_core_fv;
+  in_filter_neq -> nred_core_fv;
+  nplug_fv_mono -> nred_core_fv;
+  nplug_fv_upper -> nred_core_fv;
   par_red1_iff -> par_to_red1_or_eq;
   par_red1_iff -> red1_or_eq_to_par;
   has_red_spec -> check_term_true;

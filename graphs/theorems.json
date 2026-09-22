@@ -790,6 +790,67 @@
       "depends": []
     },
     {
+      "id": "in_filter_neq",
+      "label": "in_filter_neq",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "filter_neq_in",
+      "label": "filter_neq_in",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "nplug_fv_mono",
+      "label": "nplug_fv_mono",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "filter_neq_in",
+        "in_filter_neq"
+      ]
+    },
+    {
+      "id": "nplug_fv_upper",
+      "label": "nplug_fv_upper",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "filter_neq_in",
+        "in_filter_neq"
+      ]
+    },
+    {
+      "id": "nred_core_fv",
+      "label": "nred_core_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "filter_neq_in",
+        "in_filter_neq",
+        "nplug_fv_mono",
+        "nplug_fv_upper"
+      ]
+    },
+    {
       "id": "par_red1_iff",
       "label": "par_red1_iff",
       "kind": "infra",
