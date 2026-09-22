@@ -468,6 +468,39 @@
       "depends": []
     },
     {
+      "id": "Plus_mred_of_Plus_red1",
+      "label": "Plus_mred_of_Plus_red1",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mred_full_comp_pure",
+      "label": "mred_full_comp_pure",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": [
+        "Plus_mred_of_Plus_red1",
+        "lemma_2_2_full_comp"
+      ]
+    },
+    {
+      "id": "mred_plus_one",
+      "label": "mred_plus_one",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
       "id": "Plus_red1_context",
       "label": "Plus_red1_context",
       "kind": "infra",
@@ -699,6 +732,26 @@
     {
       "id": "eqC_in_Es",
       "label": "eqC_in_Es",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "Es_ctx_any",
+      "label": "Es_ctx_any",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "nred_R_intro",
+      "label": "nred_R_intro",
       "kind": "infra",
       "status": "proved",
       "milestone": "M0",

@@ -49,6 +49,9 @@ digraph theorem_deps {
   mred_B_intro [label="mred_B_intro", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mred_B_intro theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   mred_gc_intro [label="mred_gc_intro", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mred_gc_intro theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   mred_r_intro [label="mred_r_intro", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mred_r_intro theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  Plus_mred_of_Plus_red1 [label="Plus_mred_of_Plus_red1", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Plus_mred_of_Plus_red1 theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  mred_full_comp_pure [label="mred_full_comp_pure", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mred_full_comp_pure theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  mred_plus_one [label="mred_plus_one", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mred_plus_one theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Plus_red1_context [label="Plus_red1_context", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Plus_red1_context theory/Metatheory.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   occurs_count_zero [label="occurs_count_zero", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="occurs_count_zero theory/Metatheory.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   occurs_count_false [label="occurs_count_false", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="occurs_count_false theory/Metatheory.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
@@ -70,6 +73,8 @@ digraph theorem_deps {
   isubst_meta_in [label="isubst_meta_in", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="isubst_meta_in theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   isubst_meta_notin [label="isubst_meta_notin", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="isubst_meta_notin theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   eqC_in_Es [label="eqC_in_Es", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="eqC_in_Es theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  Es_ctx_any [label="Es_ctx_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_ctx_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  nred_R_intro [label="nred_R_intro", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nred_R_intro theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Es_refl_any [label="Es_refl_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_refl_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Es_sym_any [label="Es_sym_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_sym_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Es_trans_any [label="Es_trans_any", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_trans_any theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
@@ -155,6 +160,8 @@ digraph theorem_deps {
   mfvs_lift_m -> mfvs_open_m;
   of_trm_plug -> mred_term_context;
   of_trm_moccurs -> of_trm_moccurs0;
+  Plus_mred_of_Plus_red1 -> mred_full_comp_pure;
+  lemma_2_2_full_comp -> mred_full_comp_pure;
   occurs_count_zero -> occurs_count_pos;
   occurs_count_false -> occurs_count_zfill_plug;
   occurs_lift_self -> occurs_count_zfill_plug;

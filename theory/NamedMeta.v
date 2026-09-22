@@ -70,7 +70,21 @@ Inductive Es : ntrm -> ntrm -> Prop :=
 | Es_trans : forall t u v, Es t u -> Es u v -> Es t v
 | Es_C : forall t x u y v,
     y <> x -> ~ In y (nfv u) -> ~ In x (nfv v) ->
-    Es (NESub (NESub t x u) y v) (NESub (NESub t y v) x u).
+    Es (NESub (NESub t x u) y v) (NESub (NESub t y v) x u)
+| Es_ctx : forall C t t', Es t t' -> Es (nplug C t) (nplug C t').
+
+Fixpoint cbinders (C : nctx) : list atom :=
+  match C with
+  | nHole => []
+  | nAppL C1 _ => cbinders C1
+  | nAppR _ C1 => cbinders C1
+  | nLam x C1 => x :: cbinders C1
+  | nESubL C1 _ _ => cbinders C1
+  | nESubR _ _ C1 => cbinders C1
+  end.
+
+Definition cavoid (C : nctx) (phi : list atom) : bool :=
+  forallb (fun y => negb (existsb (Nat.eqb y) phi)) (cbinders C).
 
 Inductive nred : ntrm -> ntrm -> Prop :=
 | nred_B : forall t x u, nred (NApp (NLam x t) u) (NESub t x u)
@@ -82,12 +96,31 @@ Inductive nred : ntrm -> ntrm -> Prop :=
     is_subst_chain C = false ->
     nred (NESub (nplug C (NMVar X d)) x u)
          (NESub (nplug C (NESub (NMVar X d) x u)) x u)
+| nred_R : forall C x u phi,
+    In x phi ->
+    (forall y, In y (nfv u) -> In y phi) ->
+    cavoid C phi = true ->
+    nred (NESub (nplug C (NVar x)) x u) (NESub (nplug C u) x u)
 | nred_ctx : forall C t t', nred t t' -> nred (nplug C t) (nplug C t').
 
 Lemma eqC_in_Es : forall t x u y v,
   y <> x -> ~ In y (nfv u) -> ~ In x (nfv v) ->
   Es (NESub (NESub t x u) y v) (NESub (NESub t y v) x u).
 Proof. intros. apply Es_C; assumption. Qed.
+
+Lemma Es_ctx_any : forall C t t', Es t t' -> Es (nplug C t) (nplug C t').
+Proof. intros. apply Es_ctx. exact H. Qed.
+
+Lemma nred_R_intro : forall C x u phi,
+  In x phi -> (forall y, In y (nfv u) -> In y phi) -> cavoid C phi = true ->
+  nred (NESub (nplug C (NVar x)) x u) (NESub (nplug C u) x u).
+Proof.
+  intros C x u phi Hx Hu Hc.
+  apply nred_R with (phi := phi).
+  - exact Hx.
+  - exact Hu.
+  - exact Hc.
+Qed.
 
 Lemma Es_refl_any : forall t, Es t t.
 Proof. intros. apply Es_refl. Qed.
@@ -100,6 +133,8 @@ Proof. intros. apply Es_trans with (u := u); assumption. Qed.
 
 Print Assumptions isubst_meta_in.
 Print Assumptions isubst_meta_notin.
+Print Assumptions Es_ctx_any.
+Print Assumptions nred_R_intro.
 Print Assumptions eqC_in_Es.
 Print Assumptions Es_refl_any.
 Print Assumptions Es_sym_any.
