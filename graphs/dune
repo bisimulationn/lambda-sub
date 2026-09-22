@@ -1,0 +1,23 @@
+(rule
+ (alias graphs)
+ (deps
+  ../scripts/gen_graphs.py
+  ../scripts/extract_metadata.py
+  (source_tree ../theory))
+ (targets
+  theorems.json
+  dependency.dot
+  dependency.svg
+  dependency.png
+  rules.dot
+  rules.svg
+  rules.png
+  reduction.dot
+  reduction.svg
+  reduction.png)
+ (mode promote)
+ (action
+  (run python3 ../scripts/gen_graphs.py
+       --outdir .
+       --meta theorems.json
+       --theory ../theory)))

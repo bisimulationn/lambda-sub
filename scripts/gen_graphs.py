@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import importlib.util
 import json
 import os
 import subprocess
@@ -36,8 +37,8 @@ def q(s):
     return '"' + str(s).replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
-def load():
-    with open(META, "r", encoding="utf-8") as f:
+def load(path):
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -159,7 +160,27 @@ def run_dot(path):
 
 
 def main():
-    data = load()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--outdir", default=GRAPH_DIR)
+    ap.add_argument("--meta", default=os.path.join(GRAPH_DIR, "theorems.json"))
+    ap.add_argument("--theory", default=None)
+    args = ap.parse_args()
+    os.makedirs(args.outdir, exist_ok=True)
+    if args.theory:
+        spec = importlib.util.spec_from_file_location(
+            "extract_metadata",
+            os.path.join(ROOT, "scripts", "extract_metadata.py"),
+        )
+        extract = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(extract)
+        data = extract.extract(args.theory)
+        with open(args.meta, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+        print("wrote", os.path.relpath(args.meta, ROOT))
+    else:
+        data = load(args.meta)
     outputs = {
         "dependency.dot": dependency_dot(data),
         "rules.dot": rules_dot(),
@@ -167,11 +188,11 @@ def main():
     }
     ok = True
     for name, text in outputs.items():
-        p = os.path.join(GRAPH_DIR, name)
-        with open(p, "w", encoding="utf-8") as f:
+        path = os.path.join(args.outdir, name)
+        with open(path, "w", encoding="utf-8") as f:
             f.write(text)
-        print("wrote", os.path.relpath(p, ROOT))
-        if not run_dot(p):
+        print("wrote", os.path.relpath(path, ROOT))
+        if not run_dot(path):
             ok = False
     return 0 if ok else 1
 

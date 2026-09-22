@@ -9,3 +9,5 @@ _build/
 *.cmx
 __pycache__/
 *.pyc
+.lia.cache
+.audit-work.*

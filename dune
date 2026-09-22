@@ -1,0 +1,6 @@
+(rule
+ (alias audit)
+ (deps
+  (source_tree theory)
+  (source_tree scripts))
+ (action (run bash scripts/audit.sh)))
