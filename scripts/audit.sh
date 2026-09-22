@@ -33,17 +33,19 @@ while IFS= read -r -d '' f; do
 done < <(find theory -name '*.v' -print0 2>/dev/null)
 
 echo "== Print Assumptions =="
-mkdir -p /tmp/opencode/audit
-out="$(rocq compile -o /tmp/opencode/audit/ExecReducer.vo theory/ExecReducer.v 2>&1 || true)"
-echo "$out"
-if echo "$out" | grep -q "Axioms:"; then
-  echo "unexpected axioms reported" >&2
-  fail=1
-fi
-if ! echo "$out" | grep -q "Closed under the global context"; then
-  echo "no Closed-under-global-context report found" >&2
-  fail=1
-fi
+for f in ExecReducer Binding Reduction; do
+  echo "-- $f"
+  out="$(rocq compile -Q theory LambdaSub "theory/$f.v" 2>&1 || true)"
+  echo "$out"
+  if echo "$out" | grep -q "Axioms:"; then
+    echo "unexpected axioms reported in $f" >&2
+    fail=1
+  fi
+  if ! echo "$out" | grep -q "Closed under the global context"; then
+    echo "no Closed-under-global-context report found for $f" >&2
+    fail=1
+  fi
+done
 
 if [ "$fail" -ne 0 ]; then
   echo "AUDIT FAIL"
