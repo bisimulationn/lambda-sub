@@ -1,272 +1,592 @@
 {
   "paper": {
     "title": "Milner's Lambda-Calculus with Partial Substitutions",
-    "authors": ["Delia Kesner", "Shane Ó Conchúir"],
+    "authors": [
+      "Delia Kesner",
+      "Shane Ó Conchúir"
+    ],
     "url": "https://arxiv.org/abs/2312.13270",
     "html": "https://arxiv.org/html/2312.13270v1"
   },
-  "milestones": ["M0", "M1", "M2", "M3", "M4", "M5", "M6"],
-  "current": "M0",
+  "milestones": [
+    "M1",
+    "M2"
+  ],
+  "current": "M2",
   "nodes": [
     {
-      "id": "exec_step",
-      "label": "exec_step",
+      "id": "fvs_lift",
+      "label": "fvs_lift",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M1",
       "section": "",
-      "file": "theory/ExecReducer.v",
+      "file": "theory/Binding.v",
       "depends": []
     },
     {
-      "id": "exec_examples",
-      "label": "exec_examples",
+      "id": "lift_lc",
+      "label": "lift_lc",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M1",
       "section": "",
-      "file": "theory/ExecReducer.v",
-      "depends": ["exec_step"]
+      "file": "theory/Binding.v",
+      "depends": []
     },
     {
-      "id": "m1_syntax",
-      "label": "M1 syntax/binding",
+      "id": "lift_0_lc",
+      "label": "lift_0_lc",
       "kind": "infra",
-      "status": "planned",
+      "status": "proved",
       "milestone": "M1",
-      "section": "2",
-      "file": "",
-      "depends": ["exec_examples"]
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": [
+        "lift_lc"
+      ]
     },
     {
-      "id": "m1_open_close",
-      "label": "open/close laws",
+      "id": "open_rec_bvar",
+      "label": "open_rec_bvar",
       "kind": "infra",
-      "status": "planned",
+      "status": "proved",
       "milestone": "M1",
-      "section": "2",
-      "file": "",
-      "depends": ["m1_syntax"]
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
     },
     {
-      "id": "m1_red1",
-      "label": "red1 (B, Gc, R)",
+      "id": "close_rec_fvar",
+      "label": "close_rec_fvar",
       "kind": "infra",
-      "status": "planned",
+      "status": "proved",
       "milestone": "M1",
-      "section": "2",
-      "file": "",
-      "depends": ["m1_syntax", "m1_open_close"]
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
     },
     {
-      "id": "lemma_2_1_fv_preserved",
-      "label": "Lemma 2.1 fv preserved",
-      "kind": "paper",
-      "status": "planned",
+      "id": "open_rec_occurs_false",
+      "label": "open_rec_occurs_false",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "close_rec_notin",
+      "label": "close_rec_notin",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "close_rec_fvs",
+      "label": "close_rec_fvs",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "open_rec_bvar_neq",
+      "label": "open_rec_bvar_neq",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "open_rec_fvs",
+      "label": "open_rec_fvs",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": [
+        "fvs_lift",
+        "open_rec_bvar",
+        "open_rec_bvar_neq"
+      ]
+    },
+    {
+      "id": "open_close",
+      "label": "open_close",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": [
+        "open_rec_bvar"
+      ]
+    },
+    {
+      "id": "subst_fvar_self",
+      "label": "subst_fvar_self",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": [
+        "lift_0_lc"
+      ]
+    },
+    {
+      "id": "subst_fvar_other",
+      "label": "subst_fvar_other",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "subst_fvs",
+      "label": "subst_fvs",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": [
+        "close_rec_fvs",
+        "open_rec_fvs"
+      ]
+    },
+    {
+      "id": "Plus_red1_context",
+      "label": "Plus_red1_context",
+      "kind": "infra",
+      "status": "proved",
       "milestone": "M2",
-      "section": "2",
-      "file": "",
-      "depends": ["m1_red1"]
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "occurs_count_zero",
+      "label": "occurs_count_zero",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "occurs_count_false",
+      "label": "occurs_count_false",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "occurs_count_pos",
+      "label": "occurs_count_pos",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "occurs_count_zero"
+      ]
+    },
+    {
+      "id": "occurs_lift_self",
+      "label": "occurs_lift_self",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "zdecs_nonempty",
+      "label": "zdecs_nonempty",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "occurs_count_zfill_plug",
+      "label": "occurs_count_zfill_plug",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "occurs_count_false",
+        "occurs_lift_self"
+      ]
+    },
+    {
+      "id": "open_rec_zplug_lift",
+      "label": "open_rec_zplug_lift",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "occurs_lift_self",
+        "open_rec_occurs_false"
+      ]
+    },
+    {
+      "id": "full_comp_aux",
+      "label": "full_comp_aux",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "occurs_count_zero",
+        "occurs_count_zfill_plug",
+        "open_rec_occurs_false",
+        "open_rec_zplug_lift",
+        "zdecs_nonempty",
+        "zdecs_sound"
+      ]
     },
     {
       "id": "lemma_2_2_full_comp",
-      "label": "Lemma 2.2 full composition",
+      "label": "lemma_2_2_full_comp",
       "kind": "paper",
-      "status": "planned",
+      "status": "proved",
       "milestone": "M2",
-      "section": "2",
-      "file": "",
-      "depends": ["m1_red1"]
+      "section": "2.2",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "full_comp_aux"
+      ]
+    },
+    {
+      "id": "fvs_zplug_lift",
+      "label": "fvs_zplug_lift",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "fvs_lift"
+      ]
+    },
+    {
+      "id": "plug_fv_mono",
+      "label": "plug_fv_mono",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "red1_root_fv",
+      "label": "red1_root_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "fvs_zplug_lift"
+      ]
+    },
+    {
+      "id": "red1r_fv",
+      "label": "red1r_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "plug_fv_mono",
+        "red1_root_fv"
+      ]
+    },
+    {
+      "id": "lemma_2_1_fv_preserved",
+      "label": "lemma_2_1_fv_preserved",
+      "kind": "paper",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "2.1",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "red1r_fv"
+      ]
     },
     {
       "id": "lemma_2_3_beta_sim",
-      "label": "Lemma 2.3 β-simulation",
+      "label": "lemma_2_3_beta_sim",
       "kind": "paper",
-      "status": "planned",
+      "status": "proved",
       "milestone": "M2",
-      "section": "2",
-      "file": "",
-      "depends": ["m1_red1", "lemma_2_2_full_comp"]
+      "section": "2.3",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "Plus_red1_context",
+        "lemma_2_2_full_comp"
+      ]
     },
     {
-      "id": "m3_measure",
-      "label": "sub measure",
+      "id": "zdecs_sound",
+      "label": "zdecs_sound",
       "kind": "infra",
-      "status": "planned",
-      "milestone": "M3",
-      "section": "A",
-      "file": "",
-      "depends": ["m1_red1"]
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "m3_termination",
-      "label": "{R,Gc} termination",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M3",
-      "section": "3.1",
-      "file": "",
-      "depends": ["m3_measure"]
-    },
-    {
-      "id": "m3_local_confluence",
-      "label": "{R,Gc} local confluence",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M3",
-      "section": "3.1",
-      "file": "",
-      "depends": ["m3_termination", "m1_red1"]
-    },
-    {
-      "id": "lemma_3_2_sub_nf_unique",
-      "label": "Lemma 3.2 sub NF unique",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M3",
-      "section": "3.1",
-      "file": "",
-      "depends": ["m3_local_confluence"]
-    },
-    {
-      "id": "m4_par",
-      "label": "parallel reduction par",
+      "id": "zdecs_complete",
+      "label": "zdecs_complete",
       "kind": "infra",
-      "status": "planned",
-      "milestone": "M4",
-      "section": "3.2",
-      "file": "",
-      "depends": ["m1_red1", "lemma_3_2_sub_nf_unique"]
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "m4_par_diamond",
-      "label": "par diamond",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M4",
-      "section": "3.2",
-      "file": "",
-      "depends": ["m4_par"]
-    },
-    {
-      "id": "theorem_confluence_terms",
-      "label": "Confluence on terms",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M4",
-      "section": "3.2",
-      "file": "",
-      "depends": ["m4_par_diamond", "lemma_2_3_beta_sim"]
-    },
-    {
-      "id": "m5_mvar",
-      "label": "XΔ metaterms",
+      "id": "positions_at",
+      "label": "positions_at",
       "kind": "infra",
-      "status": "planned",
-      "milestone": "M5",
-      "section": "3.3",
-      "file": "",
-      "depends": ["m1_syntax"]
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "m5_rx",
-      "label": "RX rule",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M5",
-      "section": "3.3",
-      "file": "",
-      "depends": ["m5_mvar", "m1_red1"]
+      "id": "root_steps_sound",
+      "label": "root_steps_sound",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "zdecs_sound"
+      ]
     },
     {
-      "id": "m5_eq_C",
-      "label": "=C setoid",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M5",
-      "section": "3.3",
-      "file": "",
-      "depends": ["m5_mvar"]
+      "id": "root_steps_complete",
+      "label": "root_steps_complete",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "zdecs_complete"
+      ]
     },
     {
-      "id": "m5_coherence",
-      "label": "RX + =C coherence",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M5",
-      "section": "3.3",
-      "file": "",
-      "depends": ["m5_rx", "m5_eq_C", "lemma_3_2_sub_nf_unique"]
+      "id": "steps_sound",
+      "label": "steps_sound",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "positions_at",
+        "root_steps_sound"
+      ]
     },
     {
-      "id": "theorem_confluence_metaterms",
-      "label": "Confluence on metaterms",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M5",
-      "section": "3.3",
-      "file": "",
-      "depends": ["m5_coherence", "m4_par_diamond"]
+      "id": "steps_sound_red1",
+      "label": "steps_sound_red1",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "steps_sound"
+      ]
     },
     {
-      "id": "m6_translation",
-      "label": "translation to λβp",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M6",
-      "section": "4",
-      "file": "",
-      "depends": ["m1_red1"]
+      "id": "positions_hole",
+      "label": "positions_hole",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "m6_sn",
-      "label": "SN for simply typed",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M6",
-      "section": "6",
-      "file": "",
-      "depends": ["m6_translation"]
+      "id": "root_steps_in_steps",
+      "label": "root_steps_in_steps",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "positions_hole"
+      ]
     },
     {
-      "id": "m6_intersection",
-      "label": "intersection typing",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M6",
-      "section": "6",
-      "file": "",
-      "depends": ["m6_sn"]
+      "id": "plug_comp",
+      "label": "plug_comp",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "m6_typable_sn",
-      "label": "typable → SN",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M6",
-      "section": "6",
-      "file": "",
-      "depends": ["m6_intersection"]
+      "id": "positions_comp",
+      "label": "positions_comp",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "m6_sn_typable",
-      "label": "SN → typable",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M6",
-      "section": "6",
-      "file": "",
-      "depends": ["m6_typable_sn"]
+      "id": "at_ctx_comp",
+      "label": "at_ctx_comp",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
     },
     {
-      "id": "corollary_6_21_psn",
-      "label": "Cor 6.21 PSN",
-      "kind": "paper",
-      "status": "planned",
-      "milestone": "M6",
-      "section": "6",
-      "file": "",
-      "depends": ["m6_sn_typable", "theorem_confluence_terms"]
+      "id": "steps_complete",
+      "label": "steps_complete",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "at_ctx_comp",
+        "plug_comp",
+        "positions_comp",
+        "root_steps_complete",
+        "root_steps_in_steps"
+      ]
+    },
+    {
+      "id": "has_red_f",
+      "label": "has_red_f",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
+    },
+    {
+      "id": "has_red_spec",
+      "label": "has_red_spec",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "has_red_f",
+        "steps_complete",
+        "steps_sound"
+      ]
+    },
+    {
+      "id": "red1_dec",
+      "label": "red1_dec",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "has_red_spec"
+      ]
+    },
+    {
+      "id": "corpus_sound",
+      "label": "corpus_sound",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Tests.v",
+      "depends": [
+        "steps_sound"
+      ]
+    },
+    {
+      "id": "corpus_complete",
+      "label": "corpus_complete",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Tests.v",
+      "depends": [
+        "steps_complete"
+      ]
+    },
+    {
+      "id": "corpus_decides",
+      "label": "corpus_decides",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Tests.v",
+      "depends": [
+        "has_red_spec"
+      ]
+    },
+    {
+      "id": "corpus_fv_preserved",
+      "label": "corpus_fv_preserved",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Tests.v",
+      "depends": [
+        "lemma_2_1_fv_preserved",
+        "steps_sound_red1"
+      ]
     }
   ]
 }

@@ -85,7 +85,7 @@ def extract(theory_dir):
         with open(path, "r", encoding="utf-8") as fh:
             text = fh.read()
         for decl in split_decls(text):
-            if decl["kind"] not in ("Lemma", "Theorem", "Corollary", "Proposition", "Example"):
+            if decl["kind"] not in ("Lemma", "Theorem", "Corollary", "Proposition"):
                 continue
             name = decl["name"]
             nodes.append(

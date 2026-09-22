@@ -42,48 +42,59 @@ def load(path):
         return json.load(f)
 
 
+def esc_html(s):
+    return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def dependency_dot(data):
     nodes = data["nodes"]
     by_id = {n["id"]: n for n in nodes}
     title = data["paper"]["title"] + " - theorem dependency (" + data["current"] + ")"
+    legend = (
+        "<B>" + esc_html(title) + "</B>"
+        "<BR/><FONT POINT-SIZE=\"9\">"
+        "<FONT COLOR=\"#38761d\">proved</FONT>   "
+        "<FONT COLOR=\"#b45f06\">stated</FONT>   "
+        "<FONT COLOR=\"#777777\">planned</FONT>   "
+        "<FONT COLOR=\"#cc0000\">blocked</FONT>"
+        "</FONT>"
+    )
     lines = [
         "digraph theorem_deps {",
         "  rankdir=LR;",
-        "  bgcolor=\"white\";",
-        "  node [fontname=Inter, fontsize=10, fontcolor=\"%s\"];" % INK,
-        "  edge [fontname=Inter, fontsize=8, color=\"%s\"];" % INK,
-        "  graph [fontname=Inter, fontsize=12, labelloc=t, label=%s];" % q(title),
+        '  bgcolor="white";',
+        "  splines=spline;",
+        "  nodesep=0.22;",
+        "  ranksep=0.6;",
+        '  node [fontname=Inter, fontsize=9, fontcolor="#222222"];',
+        '  edge [fontname=Inter, fontsize=8, color="#9a9a9a", arrowsize=0.6, penwidth=0.8];',
+        "  graph [fontname=Inter, fontsize=12, labelloc=t, label=<%s>];" % legend,
     ]
-    for ms in data["milestones"]:
-        members = [n for n in nodes if n["milestone"] == ms]
-        if not members:
-            continue
-        lines.append("  subgraph cluster_%s {" % ms)
-        lines.append("    label=%s;" % q(ms))
-        lines.append("    style=\"rounded\";")
-        lines.append("    color=\"#bbbbbb\";")
-        lines.append("    fontcolor=\"%s\";" % INK)
-        for n in members:
-            fill = STATUS_FILL.get(n["status"], "#f3f3f3")
-            pen = STATUS_PEN.get(n["status"], "#777777")
-            style = STATUS_STYLE.get(n["status"], "dashed")
-            tip = n["id"]
-            if n.get("section"):
-                tip += " (section " + n["section"] + ")"
-            if n.get("file"):
-                tip += " " + n["file"]
-            tip += " " + data["paper"]["html"]
-            attrs = [
-                "label=%s" % q(n["label"]),
-                "color=%s" % q(pen),
-                "fillcolor=%s" % q(fill),
-                "style=%s" % q(style),
-                "fontcolor=%s" % q(INK),
-                "tooltip=%s" % q(tip),
-                "shape=%s" % ("box" if n["kind"] == "paper" else "ellipse"),
-            ]
-            lines.append("    %s [%s];" % (n["id"], ", ".join(attrs)))
-        lines.append("  }")
+    for n in nodes:
+        fill = STATUS_FILL.get(n["status"], "#f3f3f3")
+        pen = STATUS_PEN.get(n["status"], "#777777")
+        style = STATUS_STYLE.get(n["status"], "dashed")
+        tip = n["id"]
+        if n.get("section"):
+            tip += " (section " + n["section"] + ")"
+        if n.get("file"):
+            tip += " " + n["file"]
+        tip += " " + data["paper"]["html"]
+        if n["kind"] == "paper":
+            shape = "box"
+            style = "rounded," + style
+        else:
+            shape = "ellipse"
+        attrs = [
+            "label=%s" % q(n["label"]),
+            "color=%s" % q(pen),
+            "fillcolor=%s" % q(fill),
+            "style=%s" % q(style),
+            "fontcolor=%s" % q("#222222"),
+            "tooltip=%s" % q(tip),
+            "shape=%s" % shape,
+        ]
+        lines.append("  %s [%s];" % (n["id"], ", ".join(attrs)))
     for n in nodes:
         for d in n.get("depends", []):
             if d in by_id:

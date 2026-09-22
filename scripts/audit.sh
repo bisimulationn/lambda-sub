@@ -33,9 +33,11 @@ while IFS= read -r -d '' f; do
 done < <(find theory -name '*.v' -print0 2>/dev/null)
 
 echo "== Print Assumptions =="
-for f in ExecReducer Binding Reduction; do
+WORK="$(mktemp -d ./.audit-work.XXXXXX)"
+cp theory/*.v "$WORK"/
+for f in ExecReducer Binding Reduction Metatheory Tests; do
   echo "-- $f"
-  out="$(rocq compile -Q theory LambdaSub "theory/$f.v" 2>&1 || true)"
+  out="$(rocq compile -Q "$WORK" LambdaSub "$WORK/$f.v" 2>&1 || true)"
   echo "$out"
   if echo "$out" | grep -q "Axioms:"; then
     echo "unexpected axioms reported in $f" >&2
@@ -46,6 +48,7 @@ for f in ExecReducer Binding Reduction; do
     fail=1
   fi
 done
+rm -rf "$WORK"
 
 if [ "$fail" -ne 0 ]; then
   echo "AUDIT FAIL"
