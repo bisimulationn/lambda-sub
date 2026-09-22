@@ -6,9 +6,24 @@
   (source_tree ../theory))
  (targets
   theorems.json
-  dependency.dot
-  dependency.svg
-  dependency.png
+  dependency-overview.dot
+  dependency-overview.svg
+  dependency-overview.png
+  dependency-M1.dot
+  dependency-M1.svg
+  dependency-M1.png
+  dependency-M2.dot
+  dependency-M2.svg
+  dependency-M2.png
+  dependency-M3.dot
+  dependency-M3.svg
+  dependency-M3.png
+  dependency-M4.dot
+  dependency-M4.svg
+  dependency-M4.png
+  dependency-M5.dot
+  dependency-M5.svg
+  dependency-M5.png
   rules.dot
   rules.svg
   rules.png

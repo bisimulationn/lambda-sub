@@ -9,28 +9,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GRAPH_DIR = os.path.join(ROOT, "graphs")
 META = os.path.join(GRAPH_DIR, "theorems.json")
 
-STATUS_FILL = {
-    "proved": "#d9ead3",
-    "stated": "#fff2cc",
-    "planned": "#f3f3f3",
-    "blocked": "#f4cccc",
-}
-STATUS_PEN = {
-    "proved": "#38761d",
-    "stated": "#b45f06",
-    "planned": "#777777",
-    "blocked": "#cc0000",
-}
-STATUS_STYLE = {
-    "proved": "filled",
-    "stated": "filled,dashed",
-    "planned": "dashed",
-    "blocked": "filled,bold",
-}
-INK = "#333333"
-RULE_B = "#990000"
-RULE_R = "#674ea7"
-RULE_G = "#38761d"
+INK = "#000000"
+MUTED = "#000000"
+FONT = "#000000"
+FILL = "#ffffff"
+EXT_FILL = "#ffffff"
+NF_FILL = "#ffffff"
+
+RULE_B = "#000000"
+RULE_R = "#000000"
+RULE_G = "#000000"
 
 
 def q(s):
@@ -46,110 +34,146 @@ def esc_html(s):
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def dependency_dot(data):
-    nodes = data["nodes"]
-    by_id = {n["id"]: n for n in nodes}
-    title = data["paper"]["title"] + " - theorem dependency (" + data["current"] + ")"
-    legend = (
-        "<B>" + esc_html(title) + "</B>"
-        "<BR/><FONT POINT-SIZE=\"9\">"
-        "<FONT COLOR=\"#38761d\">proved</FONT>   "
-        "<FONT COLOR=\"#b45f06\">stated</FONT>   "
-        "<FONT COLOR=\"#777777\">planned</FONT>   "
-        "<FONT COLOR=\"#cc0000\">blocked</FONT>"
-        "</FONT>"
+def node_line(n, external=False):
+    if external:
+        label = n["id"] + "\\n(" + n["milestone"] + ")"
+        shape = "box"
+        style = "rounded,dashed,filled"
+        fill = EXT_FILL
+        color = MUTED
+        fontcolor = FONT
+        pen = 0.9
+    else:
+        label = n["id"]
+        shape = "box" if n["kind"] == "paper" else "ellipse"
+        style = "rounded,filled" if n["kind"] == "paper" else "filled"
+        fill = FILL
+        color = INK
+        fontcolor = FONT
+        pen = 1.0
+    tip = n["id"]
+    if n.get("section"):
+        tip += " (section " + n["section"] + ")"
+    if n.get("file"):
+        tip += " " + n["file"]
+    tip += " " + n["status"]
+    return (
+        "  %s [label=%s, shape=%s, style=%s, fillcolor=%s, color=%s, "
+        "penwidth=%.1f, fontcolor=%s, tooltip=%s];"
+        % (n["id"], q(label), shape, q(style), q(fill), q(color), pen, q(fontcolor), q(tip))
     )
-    lines = [
-        "digraph theorem_deps {",
+
+
+def dep_header(title):
+    return [
+        "digraph deps {",
         "  rankdir=LR;",
-        '  bgcolor="white";',
-        "  splines=spline;",
-        "  nodesep=0.22;",
-        "  ranksep=0.6;",
-        '  node [fontname=Inter, fontsize=9, fontcolor="#222222"];',
-        '  edge [fontname=Inter, fontsize=8, color="#9a9a9a", arrowsize=0.6, penwidth=0.8];',
-        "  graph [fontname=Inter, fontsize=12, labelloc=t, label=<%s>];" % legend,
+        '  bgcolor="#ffffff";',
+        "  splines=polyline;",
+        "  concentrate=true;",
+        "  nodesep=0.2;",
+        "  ranksep=0.9;",
+        '  node [fontname=Inter, fontsize=9];',
+        '  edge [fontname=Inter, fontsize=8, color="%s", fontcolor="%s", arrowsize=0.6, penwidth=0.8];' % (MUTED, FONT),
+        '  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="%s", label=<<B>%s</B>>];' % (FONT, esc_html(title)),
     ]
-    for n in nodes:
-        fill = STATUS_FILL.get(n["status"], "#f3f3f3")
-        pen = STATUS_PEN.get(n["status"], "#777777")
-        style = STATUS_STYLE.get(n["status"], "dashed")
-        tip = n["id"]
-        if n.get("section"):
-            tip += " (section " + n["section"] + ")"
-        if n.get("file"):
-            tip += " " + n["file"]
-        tip += " " + data["paper"]["html"]
-        if n["kind"] == "paper":
-            shape = "box"
-            style = "rounded," + style
-        else:
-            shape = "ellipse"
-        attrs = [
-            "label=%s" % q(n["label"]),
-            "color=%s" % q(pen),
-            "fillcolor=%s" % q(fill),
-            "style=%s" % q(style),
-            "fontcolor=%s" % q("#222222"),
-            "tooltip=%s" % q(tip),
-            "shape=%s" % shape,
-        ]
-        lines.append("  %s [%s];" % (n["id"], ", ".join(attrs)))
-    for n in nodes:
-        for d in n.get("depends", []):
+
+
+def dependency_overview_dot(data):
+    by_id = {n["id"]: n for n in data["nodes"]}
+    counts = {}
+    for n in data["nodes"]:
+        counts[n["milestone"]] = counts.get(n["milestone"], 0) + 1
+    milestones = [m for m in data["milestones"] if counts.get(m)]
+    edges = set()
+    for n in data["nodes"]:
+        for d in n["depends"]:
             if d in by_id:
+                a = by_id[d]["milestone"]
+                b = n["milestone"]
+                if a != b and a in counts and b in counts:
+                    edges.add((a, b))
+    lines = dep_header("Theorem dependency by milestone")
+    for m in milestones:
+        label = "%s\\n%d results" % (m, counts[m])
+        lines.append(
+            '  %s [label=%s, shape=box, style="rounded,filled", fillcolor=%s, '
+            "color=%s, fontcolor=%s];" % (m, q(label), q(FILL), q(INK), q(FONT))
+        )
+    for a, b in sorted(edges):
+        lines.append("  %s -> %s;" % (a, b))
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+def dependency_subset_dot(data, title, keep_ids):
+    by_id = {n["id"]: n for n in data["nodes"]}
+    inside = [n for n in data["nodes"] if n["id"] in keep_ids]
+    ids = {n["id"] for n in inside}
+    ext_ids = sorted(
+        {d for n in inside for d in n["depends"] if d not in ids and d in by_id}
+    )
+    lines = dep_header(title)
+    for d in ext_ids:
+        lines.append(node_line(by_id[d], external=True))
+    for n in sorted(inside, key=lambda x: (x["file"], x["id"])):
+        lines.append(node_line(n))
+    keep = ids | set(ext_ids)
+    for n in inside:
+        for d in n["depends"]:
+            if d in keep:
                 lines.append("  %s -> %s;" % (d, n["id"]))
     lines.append("}")
     return "\n".join(lines) + "\n"
 
 
 def rules_dot():
-    box = 'shape=box, style="rounded,filled", fillcolor="#f5f5f5", color="%s", fontcolor="%s"' % (INK, INK)
+    box = 'shape=box, style="rounded,filled", fillcolor="%s", color="%s", fontcolor="%s"' % (FILL, INK, FONT)
     lines = [
         "digraph lambda_sub_cfg {",
         "  rankdir=TB;",
-        "  bgcolor=\"white\";",
-        "  node [fontname=Inter, fontsize=10];",
-        "  edge [fontname=Inter, fontsize=9, color=\"%s\"];" % INK,
-        "  start [label=\"term\", shape=oval, style=filled, fillcolor=\"#f3f3f3\", color=\"%s\"];" % INK,
+        '  bgcolor="#ffffff";',
+        '  node [fontname=Inter, fontsize=10, fontcolor="%s"];' % FONT,
+        '  edge [fontname=Inter, fontsize=9, color="%s", fontcolor="%s"];' % (MUTED, FONT),
+        '  start [label="term", shape=oval, style=filled, fillcolor="%s", color="%s"];' % (FILL, INK),
         "  beta [label=\"(lambda x. t) u\", %s];" % box,
         "  es [label=\"t[x/u]\", %s];" % box,
-        "  pure [label=\"pure term\", shape=oval, style=filled, fillcolor=\"#f3f3f3\", color=\"%s\"];" % INK,
-        "  nf [label=\"normal form\", shape=doublecircle, style=filled, fillcolor=\"#d9ead3\", color=\"%s\"];" % RULE_G,
-        "  start -> beta [label=\"App(Lam,_)\"];",
-        "  start -> es [label=\"ESub\"];",
-        "  start -> pure [label=\"BVar/FVar/Lam\"];",
-        "  beta -> es [label=\"B\", color=\"%s\"];" % RULE_B,
-        "  es -> es [label=\"R (one occurrence)\", color=\"%s\"];" % RULE_R,
-        "  es -> pure [label=\"Gc (x not in fv)\", color=\"%s\"];" % RULE_G,
-        "  pure -> pure [label=\"B under context\", color=\"%s\"];" % RULE_B,
-        "  es -> nf [label=\"R/Gc normalisation\", color=\"%s\"];" % RULE_R,
+        '  pure [label="pure term", shape=oval, style=filled, fillcolor="%s", color="%s"];' % (FILL, INK),
+        '  nf [label="normal form", shape=doublecircle, style=filled, fillcolor="%s", color="%s"];' % (NF_FILL, RULE_G),
+        '  start -> beta [label="App(Lam,_)"];',
+        '  start -> es [label="ESub"];',
+        '  start -> pure [label="BVar/FVar/Lam"];',
+        '  beta -> es [label="B", color="%s"];' % RULE_B,
+        '  es -> es [label="R (one occurrence)", color="%s"];' % RULE_R,
+        '  es -> pure [label="Gc (x not in fv)", color="%s"];' % RULE_G,
+        '  pure -> pure [label="B under context", color="%s"];' % RULE_B,
+        '  es -> nf [label="R/Gc normalisation", color="%s"];' % RULE_R,
         "}",
     ]
     return "\n".join(lines) + "\n"
 
 
 def reduction_dot():
-    box = 'shape=box, style="filled", fillcolor="#f5f5f5", color="%s", fontcolor="%s"' % (INK, INK)
+    box = 'shape=box, style="filled", fillcolor="%s", color="%s", fontcolor="%s"' % (FILL, INK, FONT)
     lines = [
         "digraph reduction_dup {",
         "  rankdir=LR;",
-        "  bgcolor=\"white\";",
-        "  node [fontname=Inter, fontsize=10];",
-        "  edge [fontname=Inter, fontsize=9, color=\"%s\"];" % INK,
-        "  graph [labelloc=t, fontcolor=\"%s\", label=\"(lambda x. x x) y reduction graph\"];" % INK,
+        '  bgcolor="#ffffff";',
+        '  node [fontname=Inter, fontsize=10, fontcolor="%s"];' % FONT,
+        '  edge [fontname=Inter, fontsize=9, color="%s", fontcolor="%s"];' % (MUTED, FONT),
+        '  graph [labelloc=t, fontcolor="%s", label="(lambda x. x x) y reduction graph"];' % FONT,
         "  n0 [label=\"(lambda x. x x) y\", %s];" % box,
         "  n1 [label=\"(x x)[x/y]\", %s];" % box,
         "  n2 [label=\"(y x)[x/y]\", %s];" % box,
         "  n2b [label=\"(x y)[x/y]\", %s];" % box,
         "  n3 [label=\"(y y)[x/y]\", %s];" % box,
-        "  nf [label=\"y y (normal form)\", shape=doublecircle, style=filled, fillcolor=\"#d9ead3\", color=\"%s\", fontcolor=\"%s\"];" % (RULE_G, INK),
-        "  n0 -> n1 [label=\"B\", color=\"%s\"];" % RULE_B,
-        "  n1 -> n2 [label=\"R\", color=\"%s\"];" % RULE_R,
-        "  n1 -> n2b [label=\"R\", color=\"%s\"];" % RULE_R,
-        "  n2 -> n3 [label=\"R\", color=\"%s\"];" % RULE_R,
-        "  n2b -> n3 [label=\"R\", color=\"%s\"];" % RULE_R,
-        "  n3 -> nf [label=\"Gc\", color=\"%s\"];" % RULE_G,
+        '  nf [label="y y (normal form)", shape=doublecircle, style=filled, fillcolor="%s", color="%s", fontcolor="%s"];' % (NF_FILL, RULE_G, FONT),
+        '  n0 -> n1 [label="B", color="%s"];' % RULE_B,
+        '  n1 -> n2 [label="R", color="%s"];' % RULE_R,
+        '  n1 -> n2b [label="R", color="%s"];' % RULE_R,
+        '  n2 -> n3 [label="R", color="%s"];' % RULE_R,
+        '  n2b -> n3 [label="R", color="%s"];' % RULE_R,
+        '  n3 -> nf [label="Gc", color="%s"];' % RULE_G,
         "  {rank=same; n2; n2b;}",
         "}",
     ]
@@ -192,11 +216,22 @@ def main():
         print("wrote", os.path.relpath(args.meta, ROOT))
     else:
         data = load(args.meta)
-    outputs = {
-        "dependency.dot": dependency_dot(data),
-        "rules.dot": rules_dot(),
-        "reduction.dot": reduction_dot(),
-    }
+
+    counts = {}
+    for n in data["nodes"]:
+        counts[n["milestone"]] = counts.get(n["milestone"], 0) + 1
+
+    outputs = {"dependency-overview.dot": dependency_overview_dot(data)}
+    for m in data["milestones"]:
+        if not counts.get(m):
+            continue
+        keep = {n["id"] for n in data["nodes"] if n["milestone"] == m}
+        title = "Theorem dependencies %s, %d results" % (m, counts[m])
+        outputs["dependency-%s.dot" % m] = dependency_subset_dot(data, title, keep)
+
+    outputs["rules.dot"] = rules_dot()
+    outputs["reduction.dot"] = reduction_dot()
+
     ok = True
     for name, text in outputs.items():
         path = os.path.join(args.outdir, name)

@@ -1,19 +1,19 @@
 digraph lambda_sub_cfg {
   rankdir=TB;
-  bgcolor="white";
-  node [fontname=Inter, fontsize=10];
-  edge [fontname=Inter, fontsize=9, color="#333333"];
-  start [label="term", shape=oval, style=filled, fillcolor="#f3f3f3", color="#333333"];
-  beta [label="(lambda x. t) u", shape=box, style="rounded,filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
-  es [label="t[x/u]", shape=box, style="rounded,filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
-  pure [label="pure term", shape=oval, style=filled, fillcolor="#f3f3f3", color="#333333"];
-  nf [label="normal form", shape=doublecircle, style=filled, fillcolor="#d9ead3", color="#38761d"];
+  bgcolor="#ffffff";
+  node [fontname=Inter, fontsize=10, fontcolor="#000000"];
+  edge [fontname=Inter, fontsize=9, color="#000000", fontcolor="#000000"];
+  start [label="term", shape=oval, style=filled, fillcolor="#ffffff", color="#000000"];
+  beta [label="(lambda x. t) u", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  es [label="t[x/u]", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  pure [label="pure term", shape=oval, style=filled, fillcolor="#ffffff", color="#000000"];
+  nf [label="normal form", shape=doublecircle, style=filled, fillcolor="#ffffff", color="#000000"];
   start -> beta [label="App(Lam,_)"];
   start -> es [label="ESub"];
   start -> pure [label="BVar/FVar/Lam"];
-  beta -> es [label="B", color="#990000"];
-  es -> es [label="R (one occurrence)", color="#674ea7"];
-  es -> pure [label="Gc (x not in fv)", color="#38761d"];
-  pure -> pure [label="B under context", color="#990000"];
-  es -> nf [label="R/Gc normalisation", color="#674ea7"];
+  beta -> es [label="B", color="#000000"];
+  es -> es [label="R (one occurrence)", color="#000000"];
+  es -> pure [label="Gc (x not in fv)", color="#000000"];
+  pure -> pure [label="B under context", color="#000000"];
+  es -> nf [label="R/Gc normalisation", color="#000000"];
 }

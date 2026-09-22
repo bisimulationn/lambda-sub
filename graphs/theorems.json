@@ -9,13 +9,13 @@
     "html": "https://arxiv.org/html/2312.13270v1"
   },
   "milestones": [
-    "M0",
     "M1",
     "M2",
     "M3",
-    "M4"
+    "M4",
+    "M5"
   ],
-  "current": "M4",
+  "current": "M5",
   "nodes": [
     {
       "id": "fvs_lift",
@@ -294,7 +294,7 @@
       "label": "of_trm_fvs",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -304,7 +304,7 @@
       "label": "of_trm_lift",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -314,7 +314,7 @@
       "label": "of_trm_open",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
@@ -326,7 +326,7 @@
       "label": "of_trm_close",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -336,7 +336,7 @@
       "label": "of_trm_injective",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -346,7 +346,7 @@
       "label": "mfvs_lift_m",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -356,7 +356,7 @@
       "label": "mfvs_close_m",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -366,7 +366,7 @@
       "label": "mfvs_open_m",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
@@ -378,7 +378,7 @@
       "label": "of_trm_plug",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -388,7 +388,7 @@
       "label": "mred_of_red1",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -398,7 +398,7 @@
       "label": "mred_context",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -408,7 +408,7 @@
       "label": "mred_term_context",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
@@ -420,7 +420,7 @@
       "label": "of_trm_moccurs",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -430,7 +430,7 @@
       "label": "of_trm_moccurs0",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
@@ -442,7 +442,7 @@
       "label": "mred_B_intro",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -452,7 +452,7 @@
       "label": "mred_gc_intro",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -462,7 +462,7 @@
       "label": "mred_r_intro",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -472,7 +472,7 @@
       "label": "Plus_mred_of_Plus_red1",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -482,7 +482,7 @@
       "label": "mred_full_comp_pure",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
@@ -495,7 +495,7 @@
       "label": "mred_plus_one",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": []
@@ -710,11 +710,358 @@
       "depends": []
     },
     {
+      "id": "subred_intro",
+      "label": "subred_intro",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": []
+    },
+    {
+      "id": "subred_nred",
+      "label": "subred_nred",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "subred_Es_l",
+      "label": "subred_Es_l",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "subred_Es_r",
+      "label": "subred_Es_r",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "subred_Es_lr",
+      "label": "subred_Es_lr",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_Es_l",
+        "subred_Es_r"
+      ]
+    },
+    {
+      "id": "subred_context",
+      "label": "subred_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "subred_context_rule",
+      "label": "subred_context_rule",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_context",
+        "subred_nred"
+      ]
+    },
+    {
+      "id": "subred_of_Es_nred_Es",
+      "label": "subred_of_Es_nred_Es",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "nred_stable_source",
+      "label": "nred_stable_source",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "nred_stable_target",
+      "label": "nred_stable_target",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_intro"
+      ]
+    },
+    {
+      "id": "StarN_trans",
+      "label": "StarN_trans",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": []
+    },
+    {
+      "id": "StarN_one_trans",
+      "label": "StarN_one_trans",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": []
+    },
+    {
+      "id": "PlusN_to_StarN",
+      "label": "PlusN_to_StarN",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": []
+    },
+    {
+      "id": "StarN_subred_context",
+      "label": "StarN_subred_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedEs.v",
+      "depends": [
+        "subred_context"
+      ]
+    },
+    {
+      "id": "Mx_ge_0",
+      "label": "Mx_ge_0",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "head_has_pos",
+      "label": "head_has_pos",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "le_mul_of_one_le",
+      "label": "le_mul_of_one_le",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "nocc_le_Mx",
+      "label": "nocc_le_Mx",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": [
+        "head_has_pos",
+        "le_mul_of_one_le"
+      ]
+    },
+    {
+      "id": "nfv_annot_bound_example",
+      "label": "nfv_annot_bound_example",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "Mx_fresh_fails",
+      "label": "Mx_fresh_fails",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": [
+        "nfv_annot_bound_example"
+      ]
+    },
+    {
+      "id": "A1_C_related",
+      "label": "A1_C_related",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "A1_s_differ",
+      "label": "A1_s_differ",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "A1_Mx_differ",
+      "label": "A1_Mx_differ",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "A1_not_invariant",
+      "label": "A1_not_invariant",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": [
+        "A1_C_related",
+        "A1_s_differ"
+      ]
+    },
+    {
+      "id": "Gc_special_nondecrease",
+      "label": "Gc_special_nondecrease",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "nred_Gc_special",
+      "label": "nred_Gc_special",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "s_metavar_empty",
+      "label": "s_metavar_empty",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "nred_R_selfloop",
+      "label": "nred_R_selfloop",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": []
+    },
+    {
+      "id": "current_sm_not_terminating",
+      "label": "current_sm_not_terminating",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": [
+        "nred_R_selfloop"
+      ]
+    },
+    {
+      "id": "subred_selfloop",
+      "label": "subred_selfloop",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": [
+        "nred_R_selfloop",
+        "subred_nred"
+      ]
+    },
+    {
+      "id": "current_subred_not_terminating",
+      "label": "current_subred_not_terminating",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeasure.v",
+      "depends": [
+        "subred_selfloop"
+      ]
+    },
+    {
       "id": "isubst_meta_in",
       "label": "isubst_meta_in",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -724,7 +1071,7 @@
       "label": "isubst_meta_notin",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -734,7 +1081,7 @@
       "label": "eqC_in_Es",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -744,7 +1091,7 @@
       "label": "Es_ctx_any",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -754,7 +1101,7 @@
       "label": "nred_R_intro",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -764,7 +1111,7 @@
       "label": "Es_refl_any",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -774,7 +1121,7 @@
       "label": "Es_sym_any",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -784,7 +1131,7 @@
       "label": "Es_trans_any",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -794,7 +1141,7 @@
       "label": "in_filter_neq",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -804,7 +1151,7 @@
       "label": "filter_neq_in",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -814,7 +1161,7 @@
       "label": "nplug_fv_mono",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [
@@ -827,7 +1174,7 @@
       "label": "nplug_fv_upper",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [
@@ -840,7 +1187,7 @@
       "label": "nred_core_fv",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [
@@ -855,7 +1202,7 @@
       "label": "nplug_esub_fv",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [
@@ -868,7 +1215,7 @@
       "label": "nred_fv",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [
@@ -884,7 +1231,7 @@
       "label": "in_filter_neq_iff",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": []
@@ -894,7 +1241,7 @@
       "label": "Es_fv_both",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [
@@ -907,7 +1254,7 @@
       "label": "Es_fv",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeta.v",
       "depends": [

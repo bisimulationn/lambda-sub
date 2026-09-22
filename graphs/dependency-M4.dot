@@ -1,0 +1,19 @@
+digraph deps {
+  rankdir=LR;
+  bgcolor="#ffffff";
+  splines=polyline;
+  concentrate=true;
+  nodesep=0.2;
+  ranksep=0.9;
+  node [fontname=Inter, fontsize=9];
+  edge [fontname=Inter, fontsize=8, color="#000000", fontcolor="#000000", arrowsize=0.6, penwidth=0.8];
+  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="#000000", label=<<B>Theorem dependencies M4, 6 results</B>>];
+  par_context [label="par_context", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="par_context theory/Parallel.v proved"];
+  par_red1_iff [label="par_red1_iff", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="par_red1_iff theory/Parallel.v proved"];
+  par_reflexive [label="par_reflexive", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="par_reflexive theory/Parallel.v proved"];
+  par_to_red1_or_eq [label="par_to_red1_or_eq", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="par_to_red1_or_eq theory/Parallel.v proved"];
+  red1_in_par [label="red1_in_par", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="red1_in_par theory/Parallel.v proved"];
+  red1_or_eq_to_par [label="red1_or_eq_to_par", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="red1_or_eq_to_par theory/Parallel.v proved"];
+  par_red1_iff -> par_to_red1_or_eq;
+  par_red1_iff -> red1_or_eq_to_par;
+}

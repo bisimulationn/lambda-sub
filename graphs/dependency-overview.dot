@@ -1,0 +1,20 @@
+digraph deps {
+  rankdir=LR;
+  bgcolor="#ffffff";
+  splines=polyline;
+  concentrate=true;
+  nodesep=0.2;
+  ranksep=0.9;
+  node [fontname=Inter, fontsize=9];
+  edge [fontname=Inter, fontsize=8, color="#000000", fontcolor="#000000", arrowsize=0.6, penwidth=0.8];
+  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="#000000", label=<<B>Theorem dependency by milestone</B>>];
+  M1 [label="M1\\n33 results", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  M2 [label="M2\\n53 results", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  M3 [label="M3\\n16 results", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  M4 [label="M4\\n6 results", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  M5 [label="M5\\n69 results", shape=box, style="rounded,filled", fillcolor="#ffffff", color="#000000", fontcolor="#000000"];
+  M1 -> M2;
+  M1 -> M3;
+  M2 -> M3;
+  M2 -> M5;
+}
