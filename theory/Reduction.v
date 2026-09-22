@@ -263,3 +263,40 @@ Print Assumptions at_ctx_comp.
 Print Assumptions steps_complete.
 Print Assumptions has_red_spec.
 Print Assumptions red1_dec.
+
+Definition nf (t : trm) : Prop := forall t', ~ red1 t t'.
+
+Lemma nf_iff_steps_nil : forall t, nf t <-> steps t = [].
+Proof.
+  intros t. split.
+  - intro H. destruct (steps t) as [| p l] eqn:E.
+    + reflexivity.
+    + exfalso. destruct p as [r s]. apply (H s).
+      apply steps_sound_red1 with (r := r). rewrite E. left. reflexivity.
+  - intros H t' Hr. destruct Hr as [r Hr].
+    assert (Hin : In (r,t') (steps t)) by (apply steps_complete; exact Hr).
+    rewrite H in Hin. destruct Hin.
+Qed.
+
+Lemma normal_form_iff_nf : forall t, normal_form t = true <-> nf t.
+Proof.
+  intros t. unfold normal_form.
+  destruct (steps t) as [| p l] eqn:E.
+  - split; intro H.
+    + apply nf_iff_steps_nil. exact E.
+    + reflexivity.
+  - split; intro H.
+    + discriminate H.
+    + apply nf_iff_steps_nil in H. rewrite H in E. discriminate E.
+Qed.
+
+Lemma nf_dec : forall t, {nf t} + {~ nf t}.
+Proof.
+  intros t. destruct (steps t) as [| p l] eqn:E.
+  - left. apply nf_iff_steps_nil. exact E.
+  - right. intro H. apply nf_iff_steps_nil in H. rewrite H in E. discriminate E.
+Qed.
+
+Print Assumptions nf_iff_steps_nil.
+Print Assumptions normal_form_iff_nf.
+Print Assumptions nf_dec.
