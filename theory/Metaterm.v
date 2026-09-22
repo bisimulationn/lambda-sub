@@ -1,6 +1,6 @@
 From Stdlib Require Import List Bool Arith Lia PeanoNat.
 Import ListNotations.
-From LambdaSub Require Import ExecReducer Binding.
+From LambdaSub Require Import ExecReducer Binding Reduction Closure.
 
 Inductive mtrm : Type :=
 | mBVar : nat -> mtrm
@@ -161,3 +161,138 @@ Qed.
 Print Assumptions mfvs_lift_m.
 Print Assumptions mfvs_close_m.
 Print Assumptions mfvs_open_m.
+
+Inductive mctx : Type :=
+| mGHole : mctx
+| mGAppL : mctx -> mtrm -> mctx
+| mGAppR : mtrm -> mctx -> mctx
+| mGLam : mctx -> mctx
+| mGESubL : mctx -> mtrm -> mctx
+| mGESubR : mtrm -> mctx -> mctx.
+
+Fixpoint mplug (C : mctx) (t : mtrm) : mtrm :=
+  match C with
+  | mGHole => t
+  | mGAppL C1 u => mApp (mplug C1 t) u
+  | mGAppR u C1 => mApp u (mplug C1 t)
+  | mGLam C1 => mLam (mplug C1 t)
+  | mGESubL C1 u => mESub (mplug C1 t) u
+  | mGESubR t1 C1 => mESub t1 (mplug C1 t)
+  end.
+
+Fixpoint mctx_of (C : ctx) : mctx :=
+  match C with
+  | GHole => mGHole
+  | GAppL C1 u => mGAppL (mctx_of C1) (of_trm u)
+  | GAppR u C1 => mGAppR (of_trm u) (mctx_of C1)
+  | GLam C1 => mGLam (mctx_of C1)
+  | GESubL C1 u => mGESubL (mctx_of C1) (of_trm u)
+  | GESubR t1 C1 => mGESubR (of_trm t1) (mctx_of C1)
+  end.
+
+Lemma of_trm_plug : forall C t, of_trm (plug C t) = mplug (mctx_of C) (of_trm t).
+Proof.
+  induction C; intros a; simpl; try reflexivity; rewrite IHC; reflexivity.
+Qed.
+
+Fixpoint moccurs (n : nat) (t : mtrm) : bool :=
+  match t with
+  | mBVar m => Nat.eqb m n
+  | mFVar _ => false
+  | mMVar _ _ => false
+  | mApp a b => moccurs n a || moccurs n b
+  | mLam a => moccurs (S n) a
+  | mESub a b => moccurs (S n) a || moccurs n b
+  end.
+
+Definition moccurs0 (t : mtrm) : bool := moccurs 0 t.
+
+Inductive mzctx : Type :=
+| mZTop : mzctx
+| mZAppL : mzctx -> mtrm -> mzctx
+| mZAppR : mtrm -> mzctx -> mzctx
+| mZLam : mzctx -> mzctx
+| mZESubL : mzctx -> mtrm -> mzctx
+| mZESubR : mtrm -> mzctx -> mzctx.
+
+Fixpoint mzfill (C : mzctx) (k : nat) : mtrm :=
+  match C with
+  | mZTop => mBVar k
+  | mZAppL C1 u => mApp (mzfill C1 k) u
+  | mZAppR u C1 => mApp u (mzfill C1 k)
+  | mZLam C1 => mLam (mzfill C1 (S k))
+  | mZESubL C1 u => mESub (mzfill C1 (S k)) u
+  | mZESubR t1 C1 => mESub t1 (mzfill C1 k)
+  end.
+
+Fixpoint mzplug_lift (C : mzctx) (k : nat) (t : mtrm) : mtrm :=
+  match C with
+  | mZTop => lift_m k t
+  | mZAppL C1 u => mApp (mzplug_lift C1 k t) u
+  | mZAppR u C1 => mApp u (mzplug_lift C1 k t)
+  | mZLam C1 => mLam (mzplug_lift C1 (S k) t)
+  | mZESubL C1 u => mESub (mzplug_lift C1 (S k) t) u
+  | mZESubR t1 C1 => mESub t1 (mzplug_lift C1 k t)
+  end.
+
+Fixpoint mzdecs (t : mtrm) (k : nat) : list mzctx :=
+  match t with
+  | mBVar n => if Nat.eqb n k then [mZTop] else []
+  | mFVar _ => []
+  | mMVar _ _ => []
+  | mApp a b => map (fun C => mZAppL C b) (mzdecs a k) ++ map (fun C => mZAppR a C) (mzdecs b k)
+  | mLam a => map mZLam (mzdecs a (S k))
+  | mESub a b => map (fun C => mZESubL C b) (mzdecs a (S k)) ++ map (fun C => mZESubR a C) (mzdecs b k)
+  end.
+
+Inductive mred : mtrm -> mtrm -> Prop :=
+| mred_emb : forall t t', red1 t t' -> mred (of_trm t) (of_trm t')
+| mred_ctx : forall C t t', mred t t' -> mred (mplug C t) (mplug C t')
+| mred_B : forall body u, mred (mApp (mLam body) u) (mESub body u)
+| mred_gc : forall body u, moccurs0 body = false -> mred (mESub body u) body
+| mred_r : forall C body u, mzfill C 0 = body ->
+    mred (mESub body u) (mESub (mzplug_lift C 0 u) u).
+
+Lemma mred_of_red1 : forall t t', red1 t t' -> mred (of_trm t) (of_trm t').
+Proof. intros. apply mred_emb. exact H. Qed.
+
+Lemma mred_context : forall C t t', mred t t' -> mred (mplug C t) (mplug C t').
+Proof. intros. apply mred_ctx. exact H. Qed.
+
+Lemma mred_term_context : forall C t t',
+  red1 t t' -> mred (of_trm (plug C t)) (of_trm (plug C t')).
+Proof.
+  intros. rewrite of_trm_plug, of_trm_plug.
+  apply mred_ctx. apply mred_emb. exact H.
+Qed.
+
+Print Assumptions of_trm_plug.
+Print Assumptions mred_of_red1.
+Print Assumptions mred_context.
+Print Assumptions mred_term_context.
+
+Lemma of_trm_moccurs : forall t k, moccurs k (of_trm t) = occurs k t.
+Proof.
+  induction t; intros k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - rewrite IHt. reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Lemma of_trm_moccurs0 : forall t, moccurs0 (of_trm t) = occurs0 t.
+Proof. intros. apply of_trm_moccurs. Qed.
+
+Lemma mred_B_intro : forall body u, mred (mApp (mLam body) u) (mESub body u).
+Proof. intros. apply mred_B. Qed.
+
+Lemma mred_gc_intro : forall body u, moccurs0 body = false -> mred (mESub body u) body.
+Proof. intros. apply mred_gc. exact H. Qed.
+
+Print Assumptions of_trm_moccurs.
+Print Assumptions of_trm_moccurs0.
+
+Lemma mred_r_intro : forall C body u, mzfill C 0 = body ->
+  mred (mESub body u) (mESub (mzplug_lift C 0 u) u).
+Proof. intros. apply mred_r. exact H. Qed.
+
+Print Assumptions mred_r_intro.
