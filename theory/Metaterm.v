@@ -1,6 +1,6 @@
 From Stdlib Require Import List Bool Arith Lia PeanoNat.
 Import ListNotations.
-From LambdaSub Require Import ExecReducer Binding Reduction Closure.
+From LambdaSub Require Import ExecReducer Binding Reduction Closure Metatheory.
 
 Inductive mtrm : Type :=
 | mBVar : nat -> mtrm
@@ -296,3 +296,32 @@ Lemma mred_r_intro : forall C body u, mzfill C 0 = body ->
 Proof. intros. apply mred_r. exact H. Qed.
 
 Print Assumptions mred_r_intro.
+
+Inductive Plus_m (R : mtrm -> mtrm -> Prop) : mtrm -> mtrm -> Prop :=
+| plusm1 : forall t u, R t u -> Plus_m R t u
+| plusmS : forall t u v, R t u -> Plus_m R u v -> Plus_m R t v.
+
+Lemma Plus_mred_of_Plus_red1 : forall a b,
+  Plus red1 a b -> Plus_m mred (of_trm a) (of_trm b).
+Proof.
+  intros a b H. induction H as [a0 b0 HR | a0 b0 u0 HR HP IH].
+  - apply plusm1. apply mred_emb. exact HR.
+  - apply plusmS with (u := of_trm b0).
+    + apply mred_emb. exact HR.
+    + exact IH.
+Qed.
+
+Lemma mred_full_comp_pure : forall body u,
+  Plus_m mred (mESub (of_trm body) (of_trm u)) (of_trm (open_rec 0 u body)).
+Proof.
+  intros body u.
+  change (Plus_m mred (of_trm (ESub body u)) (of_trm (open_rec 0 u body))).
+  apply Plus_mred_of_Plus_red1. apply lemma_2_2_full_comp.
+Qed.
+
+Lemma mred_plus_one : forall a b, red1 a b -> Plus_m mred (of_trm a) (of_trm b).
+Proof. intros. apply plusm1. apply mred_emb. exact H. Qed.
+
+Print Assumptions Plus_mred_of_Plus_red1.
+Print Assumptions mred_full_comp_pure.
+Print Assumptions mred_plus_one.
