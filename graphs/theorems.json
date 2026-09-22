@@ -374,6 +374,100 @@
       ]
     },
     {
+      "id": "of_trm_plug",
+      "label": "of_trm_plug",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mred_of_red1",
+      "label": "mred_of_red1",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mred_context",
+      "label": "mred_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mred_term_context",
+      "label": "mred_term_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": [
+        "of_trm_plug"
+      ]
+    },
+    {
+      "id": "of_trm_moccurs",
+      "label": "of_trm_moccurs",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "of_trm_moccurs0",
+      "label": "of_trm_moccurs0",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": [
+        "of_trm_moccurs"
+      ]
+    },
+    {
+      "id": "mred_B_intro",
+      "label": "mred_B_intro",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mred_gc_intro",
+      "label": "mred_gc_intro",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mred_r_intro",
+      "label": "mred_r_intro",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
       "id": "Plus_red1_context",
       "label": "Plus_red1_context",
       "kind": "infra",
@@ -580,6 +674,66 @@
       "milestone": "M2",
       "section": "",
       "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "isubst_meta_in",
+      "label": "isubst_meta_in",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "isubst_meta_notin",
+      "label": "isubst_meta_notin",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "eqC_in_Es",
+      "label": "eqC_in_Es",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "Es_refl_any",
+      "label": "Es_refl_any",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "Es_sym_any",
+      "label": "Es_sym_any",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "Es_trans_any",
+      "label": "Es_trans_any",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
       "depends": []
     },
     {
