@@ -234,3 +234,17 @@ Print Assumptions red1_root_fv.
 Print Assumptions red1r_fv.
 Print Assumptions lemma_2_1_fv_preserved.
 Print Assumptions lemma_2_3_beta_sim.
+
+Lemma Plus_trans : forall R a b c, Plus R a b -> Plus R b c -> Plus R a c.
+Proof.
+  intros R a b c H.
+  induction H as [a0 b0 HR | a0 b0 u0 HR HP IH]; intros Hbc.
+  - apply plusS with (u := b0). exact HR. exact Hbc.
+  - apply plusS with (u := b0). exact HR. apply IH. exact Hbc.
+Qed.
+
+Lemma Plus_step_trans : forall R a b c, R a b -> Plus R b c -> Plus R a c.
+Proof. intros. apply plusS with (u := b). exact H. exact H0. Qed.
+
+Print Assumptions Plus_trans.
+Print Assumptions Plus_step_trans.
