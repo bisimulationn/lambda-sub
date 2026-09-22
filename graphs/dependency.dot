@@ -32,6 +32,14 @@ digraph theorem_deps {
   enumerate_check [label="enumerate_check", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="enumerate_check theory/Enumerate.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   enumerate_sound [label="enumerate_sound", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="enumerate_sound theory/Enumerate.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   enumerate_complete [label="enumerate_complete", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="enumerate_complete theory/Enumerate.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  of_trm_fvs [label="of_trm_fvs", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="of_trm_fvs theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  of_trm_lift [label="of_trm_lift", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="of_trm_lift theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  of_trm_open [label="of_trm_open", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="of_trm_open theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  of_trm_close [label="of_trm_close", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="of_trm_close theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  of_trm_injective [label="of_trm_injective", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="of_trm_injective theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  mfvs_lift_m [label="mfvs_lift_m", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mfvs_lift_m theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  mfvs_close_m [label="mfvs_close_m", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mfvs_close_m theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  mfvs_open_m [label="mfvs_open_m", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="mfvs_open_m theory/Metaterm.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   Plus_red1_context [label="Plus_red1_context", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Plus_red1_context theory/Metatheory.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   occurs_count_zero [label="occurs_count_zero", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="occurs_count_zero theory/Metatheory.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   occurs_count_false [label="occurs_count_false", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="occurs_count_false theory/Metatheory.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
@@ -128,6 +136,8 @@ digraph theorem_deps {
   check_all_true -> enumerate_check;
   steps_sound -> enumerate_sound;
   steps_complete -> enumerate_complete;
+  of_trm_lift -> of_trm_open;
+  mfvs_lift_m -> mfvs_open_m;
   occurs_count_zero -> occurs_count_pos;
   occurs_count_false -> occurs_count_zfill_plug;
   occurs_lift_self -> occurs_count_zfill_plug;

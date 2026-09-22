@@ -9,6 +9,7 @@
     "html": "https://arxiv.org/html/2312.13270v1"
   },
   "milestones": [
+    "M0",
     "M1",
     "M2",
     "M3",
@@ -286,6 +287,90 @@
       "file": "theory/Enumerate.v",
       "depends": [
         "steps_complete"
+      ]
+    },
+    {
+      "id": "of_trm_fvs",
+      "label": "of_trm_fvs",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "of_trm_lift",
+      "label": "of_trm_lift",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "of_trm_open",
+      "label": "of_trm_open",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": [
+        "of_trm_lift"
+      ]
+    },
+    {
+      "id": "of_trm_close",
+      "label": "of_trm_close",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "of_trm_injective",
+      "label": "of_trm_injective",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mfvs_lift_m",
+      "label": "mfvs_lift_m",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mfvs_close_m",
+      "label": "mfvs_close_m",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "mfvs_open_m",
+      "label": "mfvs_open_m",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": [
+        "mfvs_lift_m"
       ]
     },
     {

@@ -110,3 +110,54 @@ Print Assumptions of_trm_lift.
 Print Assumptions of_trm_open.
 Print Assumptions of_trm_close.
 Print Assumptions of_trm_injective.
+
+Lemma mfvs_lift_m : forall t k, mfvs (lift_m k t) = mfvs t.
+Proof.
+  induction t; intros k; simpl.
+  - destruct (Nat.ltb n k); reflexivity.
+  - reflexivity.
+  - reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - rewrite IHt. reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Lemma mfvs_close_m : forall t x k y, In y (mfvs (close_rec_m x k t)) -> In y (mfvs t).
+Proof.
+  induction t; intros x k y H; simpl in *.
+  - destruct H.
+  - destruct (Nat.eqb a x) eqn:E.
+    + destruct H.
+    + destruct H as [Hy | Hf]. subst y. simpl. left. reflexivity. destruct Hf.
+  - exact H.
+  - apply in_app_iff in H as [H|H]; apply in_app_iff.
+    + left. apply (IHt1 x k y). exact H.
+    + right. apply (IHt2 x k y). exact H.
+  - apply (IHt x (S k) y). exact H.
+  - apply in_app_iff in H as [H|H]; apply in_app_iff.
+    + left. apply (IHt1 x (S k) y). exact H.
+    + right. apply (IHt2 x k y). exact H.
+Qed.
+
+Lemma mfvs_open_m : forall t k u y,
+  In y (mfvs (open_rec_m k u t)) -> In y (mfvs u) \/ In y (mfvs t).
+Proof.
+  induction t; intros k u y H; simpl in *.
+  - destruct (Nat.eqb n k) eqn:E.
+    + apply Nat.eqb_eq in E. subst n. simpl in H.
+      left. rewrite <- (mfvs_lift_m u k). exact H.
+    + simpl in H. destruct H.
+  - right. exact H.
+  - right. exact H.
+  - apply in_app_iff in H as [H|H].
+    + destruct (IHt1 k u y H) as [Hl|Hr]. left; exact Hl. right; apply in_app_iff; left; exact Hr.
+    + destruct (IHt2 k u y H) as [Hl|Hr]. left; exact Hl. right; apply in_app_iff; right; exact Hr.
+  - destruct (IHt (S k) u y H) as [Hl|Hr]. left; exact Hl. right; exact Hr.
+  - apply in_app_iff in H as [H|H].
+    + destruct (IHt1 (S k) u y H) as [Hl|Hr]. left; exact Hl. right; apply in_app_iff; left; exact Hr.
+    + destruct (IHt2 k u y H) as [Hl|Hr]. left; exact Hl. right; apply in_app_iff; right; exact Hr.
+Qed.
+
+Print Assumptions mfvs_lift_m.
+Print Assumptions mfvs_close_m.
+Print Assumptions mfvs_open_m.
