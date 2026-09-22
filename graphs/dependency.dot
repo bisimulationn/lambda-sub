@@ -1,0 +1,110 @@
+digraph theorem_deps {
+  rankdir=LR;
+  bgcolor="white";
+  node [fontname=Inter, fontsize=10, fontcolor="#333333"];
+  edge [fontname=Inter, fontsize=8, color="#333333"];
+  graph [fontname=Inter, fontsize=12, labelloc=t, label="Milner's Lambda-Calculus with Partial Substitutions - theorem dependency (M0)"];
+  subgraph cluster_M0 {
+    label="M0";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    exec_step [label="exec_step", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#333333", tooltip="exec_step theory/ExecReducer.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+    exec_examples [label="exec_examples", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#333333", tooltip="exec_examples theory/ExecReducer.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  }
+  subgraph cluster_M1 {
+    label="M1";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    m1_syntax [label="M1 syntax/binding", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m1_syntax (section 2) https://arxiv.org/html/2312.13270v1", shape=ellipse];
+    m1_open_close [label="open/close laws", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m1_open_close (section 2) https://arxiv.org/html/2312.13270v1", shape=ellipse];
+    m1_red1 [label="red1 (B, Gc, R)", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m1_red1 (section 2) https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  }
+  subgraph cluster_M2 {
+    label="M2";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    lemma_2_1_fv_preserved [label="Lemma 2.1 fv preserved", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="lemma_2_1_fv_preserved (section 2) https://arxiv.org/html/2312.13270v1", shape=box];
+    lemma_2_2_full_comp [label="Lemma 2.2 full composition", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="lemma_2_2_full_comp (section 2) https://arxiv.org/html/2312.13270v1", shape=box];
+    lemma_2_3_beta_sim [label="Lemma 2.3 β-simulation", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="lemma_2_3_beta_sim (section 2) https://arxiv.org/html/2312.13270v1", shape=box];
+  }
+  subgraph cluster_M3 {
+    label="M3";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    m3_measure [label="sub measure", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m3_measure (section A) https://arxiv.org/html/2312.13270v1", shape=ellipse];
+    m3_termination [label="{R,Gc} termination", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m3_termination (section 3.1) https://arxiv.org/html/2312.13270v1", shape=box];
+    m3_local_confluence [label="{R,Gc} local confluence", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m3_local_confluence (section 3.1) https://arxiv.org/html/2312.13270v1", shape=box];
+    lemma_3_2_sub_nf_unique [label="Lemma 3.2 sub NF unique", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="lemma_3_2_sub_nf_unique (section 3.1) https://arxiv.org/html/2312.13270v1", shape=box];
+  }
+  subgraph cluster_M4 {
+    label="M4";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    m4_par [label="parallel reduction par", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m4_par (section 3.2) https://arxiv.org/html/2312.13270v1", shape=ellipse];
+    m4_par_diamond [label="par diamond", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m4_par_diamond (section 3.2) https://arxiv.org/html/2312.13270v1", shape=box];
+    theorem_confluence_terms [label="Confluence on terms", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="theorem_confluence_terms (section 3.2) https://arxiv.org/html/2312.13270v1", shape=box];
+  }
+  subgraph cluster_M5 {
+    label="M5";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    m5_mvar [label="XΔ metaterms", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m5_mvar (section 3.3) https://arxiv.org/html/2312.13270v1", shape=ellipse];
+    m5_rx [label="RX rule", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m5_rx (section 3.3) https://arxiv.org/html/2312.13270v1", shape=box];
+    m5_eq_C [label="=C setoid", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m5_eq_C (section 3.3) https://arxiv.org/html/2312.13270v1", shape=box];
+    m5_coherence [label="RX + =C coherence", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m5_coherence (section 3.3) https://arxiv.org/html/2312.13270v1", shape=box];
+    theorem_confluence_metaterms [label="Confluence on metaterms", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="theorem_confluence_metaterms (section 3.3) https://arxiv.org/html/2312.13270v1", shape=box];
+  }
+  subgraph cluster_M6 {
+    label="M6";
+    style="rounded";
+    color="#bbbbbb";
+    fontcolor="#333333";
+    m6_translation [label="translation to λβp", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m6_translation (section 4) https://arxiv.org/html/2312.13270v1", shape=box];
+    m6_sn [label="SN for simply typed", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m6_sn (section 6) https://arxiv.org/html/2312.13270v1", shape=box];
+    m6_intersection [label="intersection typing", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m6_intersection (section 6) https://arxiv.org/html/2312.13270v1", shape=box];
+    m6_typable_sn [label="typable → SN", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m6_typable_sn (section 6) https://arxiv.org/html/2312.13270v1", shape=box];
+    m6_sn_typable [label="SN → typable", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="m6_sn_typable (section 6) https://arxiv.org/html/2312.13270v1", shape=box];
+    corollary_6_21_psn [label="Cor 6.21 PSN", color="#777777", fillcolor="#f3f3f3", style="dashed", fontcolor="#333333", tooltip="corollary_6_21_psn (section 6) https://arxiv.org/html/2312.13270v1", shape=box];
+  }
+  exec_step -> exec_examples;
+  exec_examples -> m1_syntax;
+  m1_syntax -> m1_open_close;
+  m1_syntax -> m1_red1;
+  m1_open_close -> m1_red1;
+  m1_red1 -> lemma_2_1_fv_preserved;
+  m1_red1 -> lemma_2_2_full_comp;
+  m1_red1 -> lemma_2_3_beta_sim;
+  lemma_2_2_full_comp -> lemma_2_3_beta_sim;
+  m1_red1 -> m3_measure;
+  m3_measure -> m3_termination;
+  m3_termination -> m3_local_confluence;
+  m1_red1 -> m3_local_confluence;
+  m3_local_confluence -> lemma_3_2_sub_nf_unique;
+  m1_red1 -> m4_par;
+  lemma_3_2_sub_nf_unique -> m4_par;
+  m4_par -> m4_par_diamond;
+  m4_par_diamond -> theorem_confluence_terms;
+  lemma_2_3_beta_sim -> theorem_confluence_terms;
+  m1_syntax -> m5_mvar;
+  m5_mvar -> m5_rx;
+  m1_red1 -> m5_rx;
+  m5_mvar -> m5_eq_C;
+  m5_rx -> m5_coherence;
+  m5_eq_C -> m5_coherence;
+  lemma_3_2_sub_nf_unique -> m5_coherence;
+  m5_coherence -> theorem_confluence_metaterms;
+  m4_par_diamond -> theorem_confluence_metaterms;
+  m1_red1 -> m6_translation;
+  m6_translation -> m6_sn;
+  m6_sn -> m6_intersection;
+  m6_intersection -> m6_typable_sn;
+  m6_typable_sn -> m6_sn_typable;
+  m6_sn_typable -> corollary_6_21_psn;
+  theorem_confluence_terms -> corollary_6_21_psn;
+}

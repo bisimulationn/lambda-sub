@@ -1,0 +1,20 @@
+digraph reduction_dup {
+  rankdir=LR;
+  bgcolor="white";
+  node [fontname=Inter, fontsize=10];
+  edge [fontname=Inter, fontsize=9, color="#333333"];
+  graph [labelloc=t, fontcolor="#333333", label="(lambda x. x x) y reduction graph"];
+  n0 [label="(lambda x. x x) y", shape=box, style="filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
+  n1 [label="(x x)[x/y]", shape=box, style="filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
+  n2 [label="(y x)[x/y]", shape=box, style="filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
+  n2b [label="(x y)[x/y]", shape=box, style="filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
+  n3 [label="(y y)[x/y]", shape=box, style="filled", fillcolor="#f5f5f5", color="#333333", fontcolor="#333333"];
+  nf [label="y y (normal form)", shape=doublecircle, style=filled, fillcolor="#d9ead3", color="#38761d", fontcolor="#333333"];
+  n0 -> n1 [label="B", color="#990000"];
+  n1 -> n2 [label="R", color="#674ea7"];
+  n1 -> n2b [label="R", color="#674ea7"];
+  n2 -> n3 [label="R", color="#674ea7"];
+  n2b -> n3 [label="R", color="#674ea7"];
+  n3 -> nf [label="Gc", color="#38761d"];
+  {rank=same; n2; n2b;}
+}

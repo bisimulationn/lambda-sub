@@ -1,0 +1,272 @@
+{
+  "paper": {
+    "title": "Milner's Lambda-Calculus with Partial Substitutions",
+    "authors": ["Delia Kesner", "Shane Ó Conchúir"],
+    "url": "https://arxiv.org/abs/2312.13270",
+    "html": "https://arxiv.org/html/2312.13270v1"
+  },
+  "milestones": ["M0", "M1", "M2", "M3", "M4", "M5", "M6"],
+  "current": "M0",
+  "nodes": [
+    {
+      "id": "exec_step",
+      "label": "exec_step",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/ExecReducer.v",
+      "depends": []
+    },
+    {
+      "id": "exec_examples",
+      "label": "exec_examples",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/ExecReducer.v",
+      "depends": ["exec_step"]
+    },
+    {
+      "id": "m1_syntax",
+      "label": "M1 syntax/binding",
+      "kind": "infra",
+      "status": "planned",
+      "milestone": "M1",
+      "section": "2",
+      "file": "",
+      "depends": ["exec_examples"]
+    },
+    {
+      "id": "m1_open_close",
+      "label": "open/close laws",
+      "kind": "infra",
+      "status": "planned",
+      "milestone": "M1",
+      "section": "2",
+      "file": "",
+      "depends": ["m1_syntax"]
+    },
+    {
+      "id": "m1_red1",
+      "label": "red1 (B, Gc, R)",
+      "kind": "infra",
+      "status": "planned",
+      "milestone": "M1",
+      "section": "2",
+      "file": "",
+      "depends": ["m1_syntax", "m1_open_close"]
+    },
+    {
+      "id": "lemma_2_1_fv_preserved",
+      "label": "Lemma 2.1 fv preserved",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M2",
+      "section": "2",
+      "file": "",
+      "depends": ["m1_red1"]
+    },
+    {
+      "id": "lemma_2_2_full_comp",
+      "label": "Lemma 2.2 full composition",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M2",
+      "section": "2",
+      "file": "",
+      "depends": ["m1_red1"]
+    },
+    {
+      "id": "lemma_2_3_beta_sim",
+      "label": "Lemma 2.3 β-simulation",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M2",
+      "section": "2",
+      "file": "",
+      "depends": ["m1_red1", "lemma_2_2_full_comp"]
+    },
+    {
+      "id": "m3_measure",
+      "label": "sub measure",
+      "kind": "infra",
+      "status": "planned",
+      "milestone": "M3",
+      "section": "A",
+      "file": "",
+      "depends": ["m1_red1"]
+    },
+    {
+      "id": "m3_termination",
+      "label": "{R,Gc} termination",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M3",
+      "section": "3.1",
+      "file": "",
+      "depends": ["m3_measure"]
+    },
+    {
+      "id": "m3_local_confluence",
+      "label": "{R,Gc} local confluence",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M3",
+      "section": "3.1",
+      "file": "",
+      "depends": ["m3_termination", "m1_red1"]
+    },
+    {
+      "id": "lemma_3_2_sub_nf_unique",
+      "label": "Lemma 3.2 sub NF unique",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M3",
+      "section": "3.1",
+      "file": "",
+      "depends": ["m3_local_confluence"]
+    },
+    {
+      "id": "m4_par",
+      "label": "parallel reduction par",
+      "kind": "infra",
+      "status": "planned",
+      "milestone": "M4",
+      "section": "3.2",
+      "file": "",
+      "depends": ["m1_red1", "lemma_3_2_sub_nf_unique"]
+    },
+    {
+      "id": "m4_par_diamond",
+      "label": "par diamond",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M4",
+      "section": "3.2",
+      "file": "",
+      "depends": ["m4_par"]
+    },
+    {
+      "id": "theorem_confluence_terms",
+      "label": "Confluence on terms",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M4",
+      "section": "3.2",
+      "file": "",
+      "depends": ["m4_par_diamond", "lemma_2_3_beta_sim"]
+    },
+    {
+      "id": "m5_mvar",
+      "label": "XΔ metaterms",
+      "kind": "infra",
+      "status": "planned",
+      "milestone": "M5",
+      "section": "3.3",
+      "file": "",
+      "depends": ["m1_syntax"]
+    },
+    {
+      "id": "m5_rx",
+      "label": "RX rule",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M5",
+      "section": "3.3",
+      "file": "",
+      "depends": ["m5_mvar", "m1_red1"]
+    },
+    {
+      "id": "m5_eq_C",
+      "label": "=C setoid",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M5",
+      "section": "3.3",
+      "file": "",
+      "depends": ["m5_mvar"]
+    },
+    {
+      "id": "m5_coherence",
+      "label": "RX + =C coherence",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M5",
+      "section": "3.3",
+      "file": "",
+      "depends": ["m5_rx", "m5_eq_C", "lemma_3_2_sub_nf_unique"]
+    },
+    {
+      "id": "theorem_confluence_metaterms",
+      "label": "Confluence on metaterms",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M5",
+      "section": "3.3",
+      "file": "",
+      "depends": ["m5_coherence", "m4_par_diamond"]
+    },
+    {
+      "id": "m6_translation",
+      "label": "translation to λβp",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M6",
+      "section": "4",
+      "file": "",
+      "depends": ["m1_red1"]
+    },
+    {
+      "id": "m6_sn",
+      "label": "SN for simply typed",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M6",
+      "section": "6",
+      "file": "",
+      "depends": ["m6_translation"]
+    },
+    {
+      "id": "m6_intersection",
+      "label": "intersection typing",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M6",
+      "section": "6",
+      "file": "",
+      "depends": ["m6_sn"]
+    },
+    {
+      "id": "m6_typable_sn",
+      "label": "typable → SN",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M6",
+      "section": "6",
+      "file": "",
+      "depends": ["m6_intersection"]
+    },
+    {
+      "id": "m6_sn_typable",
+      "label": "SN → typable",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M6",
+      "section": "6",
+      "file": "",
+      "depends": ["m6_typable_sn"]
+    },
+    {
+      "id": "corollary_6_21_psn",
+      "label": "Cor 6.21 PSN",
+      "kind": "paper",
+      "status": "planned",
+      "milestone": "M6",
+      "section": "6",
+      "file": "",
+      "depends": ["m6_sn_typable", "theorem_confluence_terms"]
+    }
+  ]
+}

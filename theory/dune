@@ -1,0 +1,3 @@
+(rocq.theory
+ (name LambdaSub)
+ (theories Stdlib))

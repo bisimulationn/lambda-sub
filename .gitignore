@@ -1,0 +1,11 @@
+_build/
+*.vo
+*.vok
+*.vos
+*.glob
+*.aux
+*.cmi
+*.cmo
+*.cmx
+__pycache__/
+*.pyc
