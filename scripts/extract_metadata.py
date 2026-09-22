@@ -21,7 +21,13 @@ MILESTONE = {
     "Binding": "M1",
     "Reduction": "M1",
     "Metatheory": "M2",
+    "Closure": "M2",
+    "Substitution": "M2",
+    "Subsystem": "M3",
+    "Parallel": "M4",
     "Tests": "M2",
+    "Random": "M2",
+    "Enumerate": "M2",
 }
 MILESTONE_ORDER = ["M0", "M1", "M2", "M3", "M4", "M5", "M6"]
 PAPER_META = {

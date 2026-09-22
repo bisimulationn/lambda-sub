@@ -9,11 +9,12 @@
     "html": "https://arxiv.org/html/2312.13270v1"
   },
   "milestones": [
-    "M0",
     "M1",
-    "M2"
+    "M2",
+    "M3",
+    "M4"
   ],
-  "current": "M2",
+  "current": "M4",
   "nodes": [
     {
       "id": "fvs_lift",
@@ -166,6 +167,125 @@
       "depends": [
         "close_rec_fvs",
         "open_rec_fvs"
+      ]
+    },
+    {
+      "id": "Star_trans",
+      "label": "Star_trans",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Closure.v",
+      "depends": []
+    },
+    {
+      "id": "red1_star",
+      "label": "red1_star",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Closure.v",
+      "depends": []
+    },
+    {
+      "id": "Plus_to_Star",
+      "label": "Plus_to_Star",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Closure.v",
+      "depends": []
+    },
+    {
+      "id": "Star_red1_context",
+      "label": "Star_red1_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Closure.v",
+      "depends": []
+    },
+    {
+      "id": "star_one_trans",
+      "label": "star_one_trans",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Closure.v",
+      "depends": []
+    },
+    {
+      "id": "in_comb",
+      "label": "in_comb",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Enumerate.v",
+      "depends": []
+    },
+    {
+      "id": "pow2_pos",
+      "label": "pow2_pos",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Enumerate.v",
+      "depends": []
+    },
+    {
+      "id": "size_all_terms",
+      "label": "size_all_terms",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Enumerate.v",
+      "depends": [
+        "in_comb",
+        "pow2_pos"
+      ]
+    },
+    {
+      "id": "enumerate_check",
+      "label": "enumerate_check",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Enumerate.v",
+      "depends": [
+        "check_all_true"
+      ]
+    },
+    {
+      "id": "enumerate_sound",
+      "label": "enumerate_sound",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Enumerate.v",
+      "depends": [
+        "steps_sound"
+      ]
+    },
+    {
+      "id": "enumerate_complete",
+      "label": "enumerate_complete",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Enumerate.v",
+      "depends": [
+        "steps_complete"
       ]
     },
     {
@@ -358,11 +478,31 @@
       ]
     },
     {
+      "id": "Plus_trans",
+      "label": "Plus_trans",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "Plus_step_trans",
+      "label": "Plus_step_trans",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
       "id": "par_red1_iff",
       "label": "par_red1_iff",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M4",
       "section": "",
       "file": "theory/Parallel.v",
       "depends": []
@@ -372,7 +512,7 @@
       "label": "red1_in_par",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M4",
       "section": "",
       "file": "theory/Parallel.v",
       "depends": []
@@ -382,7 +522,7 @@
       "label": "par_context",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M4",
       "section": "",
       "file": "theory/Parallel.v",
       "depends": []
@@ -392,7 +532,7 @@
       "label": "par_to_red1_or_eq",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M4",
       "section": "",
       "file": "theory/Parallel.v",
       "depends": [
@@ -404,7 +544,7 @@
       "label": "red1_or_eq_to_par",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M4",
       "section": "",
       "file": "theory/Parallel.v",
       "depends": [
@@ -416,7 +556,7 @@
       "label": "par_reflexive",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M4",
       "section": "",
       "file": "theory/Parallel.v",
       "depends": []
@@ -426,7 +566,7 @@
       "label": "gen_list_length",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Random.v",
       "depends": []
@@ -436,7 +576,7 @@
       "label": "check_term_true",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Random.v",
       "depends": [
@@ -449,7 +589,7 @@
       "label": "check_all_true",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Random.v",
       "depends": [
@@ -461,7 +601,7 @@
       "label": "gen_sound",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Random.v",
       "depends": [
@@ -473,7 +613,7 @@
       "label": "gen_complete",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Random.v",
       "depends": [
@@ -485,7 +625,7 @@
       "label": "gen_fv_preserved",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Random.v",
       "depends": [
@@ -677,11 +817,48 @@
       ]
     },
     {
+      "id": "nf_iff_steps_nil",
+      "label": "nf_iff_steps_nil",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "steps_complete",
+        "steps_sound_red1"
+      ]
+    },
+    {
+      "id": "normal_form_iff_nf",
+      "label": "normal_form_iff_nf",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "nf_iff_steps_nil"
+      ]
+    },
+    {
+      "id": "nf_dec",
+      "label": "nf_dec",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "nf_iff_steps_nil"
+      ]
+    },
+    {
       "id": "open_rec_app",
       "label": "open_rec_app",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -691,7 +868,7 @@
       "label": "open_rec_lam",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -701,7 +878,7 @@
       "label": "open_rec_esub",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -711,7 +888,7 @@
       "label": "close_rec_app",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -721,7 +898,7 @@
       "label": "close_rec_lam",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -731,7 +908,7 @@
       "label": "close_rec_esub",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -741,7 +918,7 @@
       "label": "subst_app",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -751,7 +928,7 @@
       "label": "subst_lam",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -761,7 +938,7 @@
       "label": "subst_esub",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": []
@@ -771,7 +948,7 @@
       "label": "subst_notin",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": [
@@ -784,7 +961,7 @@
       "label": "subst_lc_self",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": [
@@ -796,7 +973,7 @@
       "label": "subst_other",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M2",
       "section": "",
       "file": "theory/Substitution.v",
       "depends": [
@@ -804,11 +981,33 @@
       ]
     },
     {
+      "id": "open_rec_lc_atom",
+      "label": "open_rec_lc_atom",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": []
+    },
+    {
+      "id": "open_rec_lc",
+      "label": "open_rec_lc",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Substitution.v",
+      "depends": [
+        "open_rec_lc_atom"
+      ]
+    },
+    {
       "id": "red_sub_root_to_red1",
       "label": "red_sub_root_to_red1",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": []
@@ -818,7 +1017,7 @@
       "label": "red_sub_to_red1",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": [
@@ -830,7 +1029,7 @@
       "label": "red_sub_context",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": []
@@ -840,7 +1039,7 @@
       "label": "red_sub_gc",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": []
@@ -850,7 +1049,7 @@
       "label": "red_sub_r",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": []
@@ -860,7 +1059,7 @@
       "label": "occurs_zfill",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": []
@@ -870,7 +1069,7 @@
       "label": "zfill_occurs0",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": [
@@ -882,11 +1081,113 @@
       "label": "R_Gc_disjoint",
       "kind": "infra",
       "status": "proved",
-      "milestone": "M0",
+      "milestone": "M3",
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": [
         "zfill_occurs0"
+      ]
+    },
+    {
+      "id": "Star_red_sub_context",
+      "label": "Star_red_sub_context",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "red_sub_context"
+      ]
+    },
+    {
+      "id": "full_comp_aux_sub",
+      "label": "full_comp_aux_sub",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "occurs_count_zero",
+        "occurs_count_zfill_plug",
+        "open_rec_occurs_false",
+        "open_rec_zplug_lift",
+        "red_sub_gc",
+        "red_sub_r",
+        "zdecs_nonempty",
+        "zdecs_sound"
+      ]
+    },
+    {
+      "id": "plus_red_sub_full_comp",
+      "label": "plus_red_sub_full_comp",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "full_comp_aux_sub"
+      ]
+    },
+    {
+      "id": "star_red_sub_full_comp",
+      "label": "star_red_sub_full_comp",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "Plus_to_Star",
+        "plus_red_sub_full_comp"
+      ]
+    },
+    {
+      "id": "es_count_plug_mono",
+      "label": "es_count_plug_mono",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
+      "id": "red_gc_measure",
+      "label": "red_gc_measure",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "es_count_plug_mono"
+      ]
+    },
+    {
+      "id": "red_gc_terminates",
+      "label": "red_gc_terminates",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "red_gc_measure"
+      ]
+    },
+    {
+      "id": "red_gc_to_red_sub",
+      "label": "red_gc_to_red_sub",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": [
+        "red_sub_gc"
       ]
     },
     {
