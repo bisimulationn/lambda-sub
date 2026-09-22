@@ -240,3 +240,63 @@ Qed.
 Print Assumptions nplug_fv_mono.
 Print Assumptions nplug_fv_upper.
 Print Assumptions nred_core_fv.
+
+Lemma nplug_esub_fv : forall C X d x u y,
+  y <> x ->
+  In y (nfv (nplug C (NESub (NMVar X d) x u))) ->
+  In y (nfv (nplug C (NMVar X d))) \/ In y (nfv u).
+Proof.
+  induction C; intros X d x u y Hne Hy; simpl in *.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + left. apply in_filter_neq in Hy as [Hy _]. simpl. exact Hy.
+    + right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. left. exact Hy.
+      * right. exact Hy.
+    + left. apply in_app_iff. right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + left. apply in_app_iff. left. exact Hy.
+    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. right. exact Hy.
+      * right. exact Hy.
+  - apply in_filter_neq in Hy as [Hy Hz].
+    apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+    + left. apply filter_neq_in; [exact Hy | exact Hz].
+    + right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hz].
+      apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hz].
+      * right. exact Hy.
+    + left. apply in_app_iff. right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + left. apply in_app_iff. left. exact Hy.
+    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. right. exact Hy.
+      * right. exact Hy.
+Qed.
+
+Lemma nred_fv : forall t t', nred t t' -> incl (nfv t') (nfv t).
+Proof.
+  intros t t' H. induction H; simpl; unfold incl in *.
+  - intros y Hy. exact Hy.
+  - intros y Hy. apply in_app_iff. left.
+    apply filter_neq_in; [exact Hy | intro E; apply H; subst; exact Hy].
+  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hne].
+      apply (nplug_esub_fv C X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
+      * apply in_app_iff. right. exact Hy.
+    + apply in_app_iff. right. exact Hy.
+  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hne].
+      apply (nplug_fv_upper C u (NVar x)) in Hy. apply in_app_iff in Hy as [Hy|Hy].
+      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
+      * apply in_app_iff. right. exact Hy.
+    + apply in_app_iff. right. exact Hy.
+  - apply nplug_fv_mono. exact IHnred.
+Qed.
+
+Print Assumptions nplug_esub_fv.
+Print Assumptions nred_fv.

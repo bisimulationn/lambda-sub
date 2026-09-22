@@ -83,6 +83,8 @@ digraph theorem_deps {
   nplug_fv_mono [label="nplug_fv_mono", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nplug_fv_mono theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   nplug_fv_upper [label="nplug_fv_upper", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nplug_fv_upper theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   nred_core_fv [label="nred_core_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nred_core_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  nplug_esub_fv [label="nplug_esub_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nplug_esub_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  nred_fv [label="nred_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nred_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   par_red1_iff [label="par_red1_iff", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="par_red1_iff theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   red1_in_par [label="red1_in_par", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="red1_in_par theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   par_context [label="par_context", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="par_context theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
@@ -194,6 +196,13 @@ digraph theorem_deps {
   in_filter_neq -> nred_core_fv;
   nplug_fv_mono -> nred_core_fv;
   nplug_fv_upper -> nred_core_fv;
+  filter_neq_in -> nplug_esub_fv;
+  in_filter_neq -> nplug_esub_fv;
+  filter_neq_in -> nred_fv;
+  in_filter_neq -> nred_fv;
+  nplug_esub_fv -> nred_fv;
+  nplug_fv_mono -> nred_fv;
+  nplug_fv_upper -> nred_fv;
   par_red1_iff -> par_to_red1_or_eq;
   par_red1_iff -> red1_or_eq_to_par;
   has_red_spec -> check_term_true;

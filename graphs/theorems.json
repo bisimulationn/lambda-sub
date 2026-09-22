@@ -851,6 +851,35 @@
       ]
     },
     {
+      "id": "nplug_esub_fv",
+      "label": "nplug_esub_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "filter_neq_in",
+        "in_filter_neq"
+      ]
+    },
+    {
+      "id": "nred_fv",
+      "label": "nred_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "filter_neq_in",
+        "in_filter_neq",
+        "nplug_esub_fv",
+        "nplug_fv_mono",
+        "nplug_fv_upper"
+      ]
+    },
+    {
       "id": "par_red1_iff",
       "label": "par_red1_iff",
       "kind": "infra",
