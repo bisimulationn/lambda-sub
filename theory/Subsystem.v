@@ -1,6 +1,6 @@
 From Stdlib Require Import List Bool Arith Lia PeanoNat.
 Import ListNotations.
-From LambdaSub Require Import ExecReducer Binding Reduction.
+From LambdaSub Require Import ExecReducer Binding Reduction Metatheory Closure.
 
 Inductive red_sub_root : trm -> trm -> Prop :=
 | rs_gc : forall body u, occurs0 body = false -> red_sub_root (ESub body u) body
@@ -62,3 +62,44 @@ Qed.
 Print Assumptions occurs_zfill.
 Print Assumptions zfill_occurs0.
 Print Assumptions R_Gc_disjoint.
+
+Lemma Star_red_sub_context : forall C t t', Star red_sub t t' -> Star red_sub (plug C t) (plug C t').
+Proof.
+  intros C t t' H. induction H.
+  - apply star_refl.
+  - apply star_step with (u := plug C u).
+    + apply red_sub_context. exact H.
+    + exact IHStar.
+Qed.
+
+Lemma full_comp_aux_sub : forall n body u, occurs_count 0 body <= n ->
+  Plus red_sub (ESub body u) (open_rec 0 u body).
+Proof.
+  induction n as [| n IH]; intros body u Hn.
+  - assert (Hc : occurs_count 0 body = 0) by lia.
+    assert (Ho : occurs0 body = false) by (apply occurs_count_zero; exact Hc).
+    rewrite (open_rec_occurs_false body u 0 Ho).
+    apply plus1. apply red_sub_gc. exact Ho.
+  - destruct (occurs0 body) eqn:E.
+    + destruct (zdecs_nonempty body 0 E) as [C HC].
+      assert (Hbody : zfill C 0 = body) by (apply zdecs_sound; exact HC).
+      assert (Hlt : occurs_count 0 (zplug_lift C 0 u) < occurs_count 0 body).
+      { rewrite <- Hbody. rewrite (occurs_count_zfill_plug C 0 u). lia. }
+      assert (Hle : occurs_count 0 (zplug_lift C 0 u) <= n) by lia.
+      apply plusS with (u := ESub (zplug_lift C 0 u) u).
+      * apply red_sub_r. exact Hbody.
+      * rewrite <- Hbody. rewrite <- (open_rec_zplug_lift C 0 u).
+        apply IH. exact Hle.
+    + rewrite (open_rec_occurs_false body u 0 E).
+      apply plus1. apply red_sub_gc. exact E.
+Qed.
+
+Lemma plus_red_sub_full_comp : forall body u, Plus red_sub (ESub body u) (open_rec 0 u body).
+Proof. intros. apply (full_comp_aux_sub (occurs_count 0 body) body u). lia. Qed.
+
+Lemma star_red_sub_full_comp : forall body u, Star red_sub (ESub body u) (open_rec 0 u body).
+Proof. intros. apply Plus_to_Star. apply plus_red_sub_full_comp. Qed.
+
+Print Assumptions Star_red_sub_context.
+Print Assumptions plus_red_sub_full_comp.
+Print Assumptions star_red_sub_full_comp.
