@@ -1,5 +1,7 @@
 status	milestone	kind	name	file
 proved	M0	infra	Es_ctx_any	theory/NamedMeta.v
+proved	M0	infra	Es_fv	theory/NamedMeta.v
+proved	M0	infra	Es_fv_both	theory/NamedMeta.v
 proved	M0	infra	Es_refl_any	theory/NamedMeta.v
 proved	M0	infra	Es_sym_any	theory/NamedMeta.v
 proved	M0	infra	Es_trans_any	theory/NamedMeta.v
@@ -7,6 +9,7 @@ proved	M0	infra	Plus_mred_of_Plus_red1	theory/Metaterm.v
 proved	M0	infra	eqC_in_Es	theory/NamedMeta.v
 proved	M0	infra	filter_neq_in	theory/NamedMeta.v
 proved	M0	infra	in_filter_neq	theory/NamedMeta.v
+proved	M0	infra	in_filter_neq_iff	theory/NamedMeta.v
 proved	M0	infra	isubst_meta_in	theory/NamedMeta.v
 proved	M0	infra	isubst_meta_notin	theory/NamedMeta.v
 proved	M0	infra	mfvs_close_m	theory/Metaterm.v

@@ -300,3 +300,58 @@ Qed.
 
 Print Assumptions nplug_esub_fv.
 Print Assumptions nred_fv.
+
+Lemma in_filter_neq_iff : forall z a l,
+  In z (filter (fun w => negb (Nat.eqb w a)) l) <-> In z l /\ z <> a.
+Proof.
+  intros z a l. split.
+  - intro H. apply filter_In in H. destruct H as [Hl Hp]. split; [exact Hl |].
+    apply Nat.eqb_neq. destruct (Nat.eqb z a) eqn:E; [| reflexivity].
+    simpl in Hp. discriminate Hp.
+  - intros [Hl Hne]. apply filter_In. split; [exact Hl |].
+    apply Nat.eqb_neq in Hne. rewrite Hne. reflexivity.
+Qed.
+
+Lemma Es_fv_both : forall t u, Es t u ->
+  incl (nfv t) (nfv u) /\ incl (nfv u) (nfv t).
+Proof.
+  apply Es_ind.
+  - intros t0. split; unfold incl; auto.
+  - intros t0 u0 H1 IH1. split.
+    + apply (proj2 IH1).
+    + apply (proj1 IH1).
+  - intros t0 u0 v0 H1 H2 IH1 IH2. split.
+    + intros z Hz. apply (proj1 IH2). apply (proj1 H2). exact Hz.
+    + intros z Hz. apply (proj2 H2). apply (proj2 IH2). exact Hz.
+  - intros t0 x0 u0 y0 v0 Hyx Hyu Hxv. split; unfold incl; intros z Hz; simpl in *;
+    apply in_app_iff in Hz as [Hz|Hz].
+    + apply in_filter_neq_iff in Hz as [Hz Hy]. apply in_app_iff in Hz as [Hz|Hz].
+      * apply in_filter_neq_iff in Hz as [Hz Hx].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [| exact Hx].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [exact Hz | exact Hy].
+      * apply in_app_iff. right. exact Hz.
+    + apply in_app_iff. left. apply in_filter_neq_iff. split; [| ].
+      * apply in_app_iff. right. exact Hz.
+      * intro E. apply Hxv. subst z. exact Hz.
+    + apply in_filter_neq_iff in Hz as [Hz Hx]. apply in_app_iff in Hz as [Hz|Hz].
+      * apply in_filter_neq_iff in Hz as [Hz Hy].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [| exact Hy].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [exact Hz | exact Hx].
+      * apply in_app_iff. right. exact Hz.
+    + apply in_app_iff. left. apply in_filter_neq_iff. split; [| ].
+      * apply in_app_iff. right. exact Hz.
+      * intro E. apply Hyu. subst z. exact Hz.
+  - intros C0 t0 t0' H1 IH1. split; apply nplug_fv_mono.
+    + apply (proj1 IH1).
+    + apply (proj2 IH1).
+Qed.
+
+Lemma Es_fv : forall t u, Es t u -> forall z, In z (nfv t) <-> In z (nfv u).
+Proof.
+  intros t u H z. destruct (Es_fv_both t u H) as [Htu Hut]. split.
+  - apply Htu.
+  - apply Hut.
+Qed.
+
+Print Assumptions in_filter_neq_iff.
+Print Assumptions Es_fv.

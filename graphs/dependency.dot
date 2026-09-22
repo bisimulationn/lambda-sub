@@ -85,6 +85,9 @@ digraph theorem_deps {
   nred_core_fv [label="nred_core_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nred_core_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   nplug_esub_fv [label="nplug_esub_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nplug_esub_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   nred_fv [label="nred_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="nred_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  in_filter_neq_iff [label="in_filter_neq_iff", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="in_filter_neq_iff theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  Es_fv_both [label="Es_fv_both", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_fv_both theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
+  Es_fv [label="Es_fv", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="Es_fv theory/NamedMeta.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   par_red1_iff [label="par_red1_iff", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="par_red1_iff theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   red1_in_par [label="red1_in_par", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="red1_in_par theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
   par_context [label="par_context", color="#38761d", fillcolor="#d9ead3", style="filled", fontcolor="#222222", tooltip="par_context theory/Parallel.v https://arxiv.org/html/2312.13270v1", shape=ellipse];
@@ -203,6 +206,9 @@ digraph theorem_deps {
   nplug_esub_fv -> nred_fv;
   nplug_fv_mono -> nred_fv;
   nplug_fv_upper -> nred_fv;
+  in_filter_neq_iff -> Es_fv_both;
+  nplug_fv_mono -> Es_fv_both;
+  Es_fv_both -> Es_fv;
   par_red1_iff -> par_to_red1_or_eq;
   par_red1_iff -> red1_or_eq_to_par;
   has_red_spec -> check_term_true;

@@ -880,6 +880,41 @@
       ]
     },
     {
+      "id": "in_filter_neq_iff",
+      "label": "in_filter_neq_iff",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "Es_fv_both",
+      "label": "Es_fv_both",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "in_filter_neq_iff",
+        "nplug_fv_mono"
+      ]
+    },
+    {
+      "id": "Es_fv",
+      "label": "Es_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M0",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "Es_fv_both"
+      ]
+    },
+    {
       "id": "par_red1_iff",
       "label": "par_red1_iff",
       "kind": "infra",
