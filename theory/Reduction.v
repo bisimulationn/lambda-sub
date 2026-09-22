@@ -161,3 +161,105 @@ Print Assumptions root_steps_complete.
 Print Assumptions steps_sound.
 Print Assumptions steps_sound_red1.
 Print Assumptions root_steps_in_steps.
+
+Fixpoint comp (C D : ctx) : ctx :=
+  match C with
+  | GHole => D
+  | GAppL C1 u => GAppL (comp C1 D) u
+  | GAppR u C1 => GAppR u (comp C1 D)
+  | GLam C1 => GLam (comp C1 D)
+  | GESubL C1 u => GESubL (comp C1 D) u
+  | GESubR t1 C1 => GESubR t1 (comp C1 D)
+  end.
+
+Lemma plug_comp : forall C D u, plug (comp C D) u = plug C (plug D u).
+Proof.
+  induction C; intros D u; simpl.
+  - reflexivity.
+  - rewrite IHC. reflexivity.
+  - rewrite IHC. reflexivity.
+  - rewrite IHC. reflexivity.
+  - rewrite IHC. reflexivity.
+  - rewrite IHC. reflexivity.
+Qed.
+
+Lemma positions_comp : forall C a D, In D (positions a) -> In (comp C D) (positions (plug C a)).
+Proof.
+  induction C; intros a D H; simpl.
+  - exact H.
+  - right. apply in_app_iff. left. apply in_map_iff. exists (comp C D). split.
+    reflexivity. apply IHC. exact H.
+  - right. apply in_app_iff. right. apply in_map_iff. exists (comp C D). split.
+    reflexivity. apply IHC. exact H.
+  - right. apply in_map_iff. exists (comp C D). split.
+    reflexivity. apply IHC. exact H.
+  - right. apply in_app_iff. left. apply in_map_iff. exists (comp C D). split.
+    reflexivity. apply IHC. exact H.
+  - right. apply in_app_iff. right. apply in_map_iff. exists (comp C D). split.
+    reflexivity. apply IHC. exact H.
+Qed.
+
+Lemma at_ctx_comp : forall C D a s, at_ctx D a = Some s -> at_ctx (comp C D) (plug C a) = Some s.
+Proof.
+  induction C; intros D a s H; simpl.
+  - exact H.
+  - apply IHC. exact H.
+  - apply IHC. exact H.
+  - apply IHC. exact H.
+  - apply IHC. exact H.
+  - apply IHC. exact H.
+Qed.
+
+Lemma steps_complete : forall a r b, red1r r a b -> In (r,b) (steps a).
+Proof.
+  intros a r b H. induction H.
+  - apply root_steps_in_steps. apply root_steps_complete. exact H.
+  - unfold steps in *.
+    apply in_flat_map in IHred1r as [D [HD Hst]].
+    apply in_flat_map. exists (comp C D). split.
+    + apply positions_comp. exact HD.
+    + unfold step_at in *.
+      destruct (at_ctx D t) as [s|] eqn:E; [| simpl in Hst; destruct Hst].
+      apply in_map_iff in Hst as [[pr pt] [Heq Hin]].
+      rewrite (at_ctx_comp C D t s E). simpl.
+      apply in_map_iff. exists (pr, pt). split.
+      * simpl in *. injection Heq as Hr Ht. subst pr.
+        rewrite (plug_comp C D pt). rewrite Ht. reflexivity.
+      * exact Hin.
+Qed.
+
+Scheme Equality for trm.
+
+Definition has_red (t t' : trm) : bool :=
+  existsb (fun p => if trm_eq_dec (snd p) t' then true else false) (steps t).
+
+Lemma has_red_f : forall t' (p : rule * trm), (if trm_eq_dec (snd p) t' then true else false) = true <-> snd p = t'.
+Proof.
+  intros t' [r s]. simpl. destruct (trm_eq_dec s t').
+  - simpl. split; intro H; [exact e | reflexivity].
+  - simpl. split; intro H; [discriminate H | exfalso; exact (n H)].
+Qed.
+
+Lemma has_red_spec : forall t t', has_red t t' = true <-> red1 t t'.
+Proof.
+  intros t t'. unfold has_red. split.
+  - intro H. apply existsb_exists in H. destruct H as [[pr pt] [Hin Hf]].
+    apply has_red_f in Hf. simpl in Hf. exists pr. apply steps_sound. rewrite Hf in Hin. exact Hin.
+  - intros [r Hr]. apply existsb_exists. exists (r,t'). split.
+    + apply steps_complete. exact Hr.
+    + apply has_red_f. reflexivity.
+Qed.
+
+Lemma red1_dec : forall t t', {red1 t t'} + {~ red1 t t'}.
+Proof.
+  intros t t'. destruct (has_red t t') eqn:E.
+  - left. apply has_red_spec. exact E.
+  - right. intro H. apply has_red_spec in H. rewrite H in E. discriminate E.
+Qed.
+
+Print Assumptions plug_comp.
+Print Assumptions positions_comp.
+Print Assumptions at_ctx_comp.
+Print Assumptions steps_complete.
+Print Assumptions has_red_spec.
+Print Assumptions red1_dec.
