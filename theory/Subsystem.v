@@ -1,5 +1,6 @@
 From Stdlib Require Import List Bool Arith Lia PeanoNat.
 Import ListNotations.
+From Stdlib Require Import Wf_nat.
 From LambdaSub Require Import ExecReducer Binding Reduction Metatheory Closure.
 
 Inductive red_sub_root : trm -> trm -> Prop :=
@@ -103,3 +104,57 @@ Proof. intros. apply Plus_to_Star. apply plus_red_sub_full_comp. Qed.
 Print Assumptions Star_red_sub_context.
 Print Assumptions plus_red_sub_full_comp.
 Print Assumptions star_red_sub_full_comp.
+
+Fixpoint es_count (t : trm) : nat :=
+  match t with
+  | BVar _ | FVar _ => 0
+  | App a b => es_count a + es_count b
+  | Lam a => es_count a
+  | ESub a b => S (es_count a + es_count b)
+  end.
+
+Inductive red_gc : trm -> trm -> Prop :=
+| rgc_root : forall body u, occurs0 body = false -> red_gc (ESub body u) body
+| rgc_ctx : forall C t t', red_gc t t' -> red_gc (plug C t) (plug C t').
+
+Lemma es_count_plug_mono : forall C t t',
+  es_count t' < es_count t -> es_count (plug C t') < es_count (plug C t).
+Proof.
+  induction C; intros a b H; simpl.
+  - exact H.
+  - pose proof (IHC a b H) as IH; lia.
+  - pose proof (IHC a b H) as IH; lia.
+  - pose proof (IHC a b H) as IH; lia.
+  - pose proof (IHC a b H) as IH; lia.
+  - pose proof (IHC a b H) as IH; lia.
+Qed.
+
+Lemma red_gc_measure : forall a b, red_gc a b -> es_count b < es_count a.
+Proof.
+  intros a b H. induction H.
+  - simpl. lia.
+  - apply es_count_plug_mono. exact IHred_gc.
+Qed.
+
+Lemma red_gc_terminates : forall t, Acc (fun x y => red_gc y x) t.
+Proof.
+  assert (H : forall n t, es_count t = n -> Acc (fun x y => red_gc y x) t).
+  { intro n. induction n as [n IH] using lt_wf_ind.
+    intros t E. constructor. intros y Hy.
+    apply (IH (es_count y)).
+    - pose proof (red_gc_measure t y Hy). lia.
+    - reflexivity. }
+  intros t. apply (H (es_count t) t). reflexivity.
+Qed.
+
+Lemma red_gc_to_red_sub : forall a b, red_gc a b -> red_sub a b.
+Proof.
+  intros a b H. induction H.
+  - apply red_sub_gc. exact H.
+  - apply red_sub_ctx. exact IHred_gc.
+Qed.
+
+Print Assumptions es_count_plug_mono.
+Print Assumptions red_gc_measure.
+Print Assumptions red_gc_terminates.
+Print Assumptions red_gc_to_red_sub.
