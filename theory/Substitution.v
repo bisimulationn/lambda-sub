@@ -64,3 +64,20 @@ Print Assumptions subst_esub.
 Print Assumptions subst_notin.
 Print Assumptions subst_lc_self.
 Print Assumptions subst_other.
+
+Lemma open_rec_lc_atom : forall t k x, lc_at k t -> open_rec k (FVar x) t = t.
+Proof.
+  induction t; intros k x H; simpl in *.
+  - destruct (Nat.eqb n k) eqn:E; [| reflexivity].
+    apply Nat.eqb_eq in E. subst n. exfalso. lia.
+  - reflexivity.
+  - destruct H as [Ha Hb]. rewrite (IHt1 k x Ha), (IHt2 k x Hb). reflexivity.
+  - rewrite (IHt (S k) x H). reflexivity.
+  - destruct H as [Ha Hb]. rewrite (IHt1 (S k) x Ha), (IHt2 k x Hb). reflexivity.
+Qed.
+
+Lemma open_rec_lc : forall t x, lc t -> open_rec 0 (FVar x) t = t.
+Proof. intros. apply open_rec_lc_atom. exact H. Qed.
+
+Print Assumptions open_rec_lc_atom.
+Print Assumptions open_rec_lc.
