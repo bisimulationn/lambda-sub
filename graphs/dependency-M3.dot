@@ -7,7 +7,7 @@ digraph deps {
   ranksep=0.9;
   node [fontname=Inter, fontsize=9];
   edge [fontname=Inter, fontsize=8, color="#000000", fontcolor="#000000", arrowsize=0.6, penwidth=0.8];
-  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="#000000", label=<<B>Theorem dependencies M3, 16 results</B>>];
+  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="#000000", label=<<B>Theorem dependencies M3, 17 results</B>>];
   Plus_to_Star [label="Plus_to_Star\\n(M2)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="Plus_to_Star theory/Closure.v proved"];
   occurs_count_zero [label="occurs_count_zero\\n(M2)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="occurs_count_zero theory/Metatheory.v proved"];
   occurs_count_zfill_plug [label="occurs_count_zfill_plug\\n(M2)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="occurs_count_zfill_plug theory/Metatheory.v proved"];
@@ -17,6 +17,7 @@ digraph deps {
   zdecs_sound [label="zdecs_sound\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="zdecs_sound theory/Reduction.v proved"];
   R_Gc_disjoint [label="R_Gc_disjoint", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="R_Gc_disjoint theory/Subsystem.v proved"];
   Star_red_sub_context [label="Star_red_sub_context", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="Star_red_sub_context theory/Subsystem.v proved"];
+  es_count_lower [label="es_count_lower", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="es_count_lower theory/Subsystem.v proved"];
   es_count_plug_mono [label="es_count_plug_mono", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="es_count_plug_mono theory/Subsystem.v proved"];
   full_comp_aux_sub [label="full_comp_aux_sub", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="full_comp_aux_sub theory/Subsystem.v proved"];
   occurs_zfill [label="occurs_zfill", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_zfill theory/Subsystem.v proved"];
@@ -46,6 +47,7 @@ digraph deps {
   full_comp_aux_sub -> plus_red_sub_full_comp;
   Plus_to_Star -> star_red_sub_full_comp;
   plus_red_sub_full_comp -> star_red_sub_full_comp;
+  es_count_lower -> red_gc_measure;
   es_count_plug_mono -> red_gc_measure;
   red_gc_measure -> red_gc_terminates;
   red_sub_gc -> red_gc_to_red_sub;

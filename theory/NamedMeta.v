@@ -19,6 +19,48 @@ Fixpoint nfv (t : ntrm) : list atom :=
   | NMVar _ d => d
   end.
 
+Fixpoint nvars (t : ntrm) : list atom :=
+  match t with
+  | NVar x => [x]
+  | NApp a b => nvars a ++ nvars b
+  | NLam x a => x :: nvars a
+  | NESub a x u => x :: (nvars a ++ nvars u)
+  | NMVar _ d => d
+  end.
+
+Definition rename_atom (x y z : atom) : atom :=
+  if Nat.eqb z x then y else z.
+
+Fixpoint rename_bound (x y : atom) (t : ntrm) : ntrm :=
+  match t with
+  | NVar z => NVar (rename_atom x y z)
+  | NApp a b => NApp (rename_bound x y a) (rename_bound x y b)
+  | NLam z a => NLam z (if Nat.eqb z x then a else rename_bound x y a)
+  | NESub a z u =>
+      NESub (if Nat.eqb z x then a else rename_bound x y a) z (rename_bound x y u)
+  | NMVar X d => NMVar X (map (rename_atom x y) d)
+  end.
+
+Definition fresh_atom (avoid : list atom) : atom := S (fold_right Nat.max 0 avoid).
+
+Definition freshen_binder (avoid : list atom) (a : ntrm) (x : atom) (u : ntrm) : ntrm :=
+  let y := fresh_atom (x :: (nvars a ++ nvars u ++ avoid)) in
+  NESub (rename_bound x y a) y u.
+
+Fixpoint freshen_substitutions (avoid : list atom) (t : ntrm) {struct t} : ntrm :=
+  match t with
+  | NVar x => NVar x
+  | NApp a b =>
+      let a' := freshen_substitutions (nvars b ++ avoid) a in
+      NApp a' (freshen_substitutions (nvars a' ++ avoid) b)
+  | NLam x a => NLam x (freshen_substitutions (x :: avoid) a)
+  | NESub a x u =>
+      let a' := freshen_substitutions (x :: (nvars u ++ avoid)) a in
+      let u' := freshen_substitutions (x :: (nvars a' ++ avoid)) u in
+      freshen_binder avoid a' x u'
+  | NMVar X d => NMVar X d
+  end.
+
 Definition isubst_meta (X : atom) (d : list atom) (x : atom) (v : ntrm) : ntrm :=
   if existsb (Nat.eqb x) d then NESub (NMVar X d) x v else NMVar X d.
 
@@ -87,19 +129,21 @@ Definition cavoid (C : nctx) (phi : list atom) : bool :=
   forallb (fun y => negb (existsb (Nat.eqb y) phi)) (cbinders C).
 
 Inductive nred : ntrm -> ntrm -> Prop :=
-| nred_B : forall t x u, nred (NApp (NLam x t) u) (NESub t x u)
+| nred_B : forall t x u, nred (NApp (NLam x t) u) (freshen_binder [] t x u)
 | nred_Gc : forall t x u, ~ In x (nfv t) -> nred (NESub t x u) t
 | nred_RX : forall C X d x u phi,
     In x d ->
     In x phi ->
     (forall y, In y (nfv u) -> In y phi) ->
     is_subst_chain C = false ->
+    ~ In x (nfv u) ->
     nred (NESub (nplug C (NMVar X d)) x u)
          (NESub (nplug C (NESub (NMVar X d) x u)) x u)
 | nred_R : forall C x u phi,
     In x phi ->
     (forall y, In y (nfv u) -> In y phi) ->
     cavoid C phi = true ->
+    ~ In x (nfv u) ->
     nred (NESub (nplug C (NVar x)) x u) (NESub (nplug C u) x u)
 | nred_ctx : forall C t t', nred t t' -> nred (nplug C t) (nplug C t').
 
@@ -113,13 +157,15 @@ Proof. intros. apply Es_ctx. exact H. Qed.
 
 Lemma nred_R_intro : forall C x u phi,
   In x phi -> (forall y, In y (nfv u) -> In y phi) -> cavoid C phi = true ->
+  ~ In x (nfv u) ->
   nred (NESub (nplug C (NVar x)) x u) (NESub (nplug C u) x u).
 Proof.
-  intros C x u phi Hx Hu Hc.
+  intros C x u phi Hx Hu Hc Hfresh.
   apply nred_R with (phi := phi).
   - exact Hx.
   - exact Hu.
   - exact Hc.
+  - exact Hfresh.
 Qed.
 
 Lemma Es_refl_any : forall t, Es t t.
@@ -214,93 +260,6 @@ Proof.
       * apply in_app_iff. right. exact Hy.
 Qed.
 
-Inductive nred_core : ntrm -> ntrm -> Prop :=
-| ncore_B : forall t x u, nred_core (NApp (NLam x t) u) (NESub t x u)
-| ncore_Gc : forall t x u, ~ In x (nfv t) -> nred_core (NESub t x u) t
-| ncore_R : forall C x u phi,
-    In x phi -> (forall y, In y (nfv u) -> In y phi) -> cavoid C phi = true ->
-    nred_core (NESub (nplug C (NVar x)) x u) (NESub (nplug C u) x u)
-| ncore_ctx : forall C t t', nred_core t t' -> nred_core (nplug C t) (nplug C t').
-
-Lemma nred_core_fv : forall t t', nred_core t t' -> incl (nfv t') (nfv t).
-Proof.
-  intros t t' H. induction H; simpl; unfold incl in *.
-  - intros y Hy. exact Hy.
-  - intros y Hy. apply in_app_iff. left.
-    apply filter_neq_in; [exact Hy | intro E; apply H; subst; exact Hy].
-  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
-    + apply in_filter_neq in Hy as [Hy Hne].
-      apply (nplug_fv_upper C u (NVar x)) in Hy. apply in_app_iff in Hy as [Hy|Hy].
-      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
-      * apply in_app_iff. right. exact Hy.
-    + apply in_app_iff. right. exact Hy.
-  - apply nplug_fv_mono. exact IHnred_core.
-Qed.
-
-Print Assumptions nplug_fv_mono.
-Print Assumptions nplug_fv_upper.
-Print Assumptions nred_core_fv.
-
-Lemma nplug_esub_fv : forall C X d x u y,
-  y <> x ->
-  In y (nfv (nplug C (NESub (NMVar X d) x u))) ->
-  In y (nfv (nplug C (NMVar X d))) \/ In y (nfv u).
-Proof.
-  induction C; intros X d x u y Hne Hy; simpl in *.
-  - apply in_app_iff in Hy as [Hy|Hy].
-    + left. apply in_filter_neq in Hy as [Hy _]. simpl. exact Hy.
-    + right. exact Hy.
-  - apply in_app_iff in Hy as [Hy|Hy].
-    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
-      * left. apply in_app_iff. left. exact Hy.
-      * right. exact Hy.
-    + left. apply in_app_iff. right. exact Hy.
-  - apply in_app_iff in Hy as [Hy|Hy].
-    + left. apply in_app_iff. left. exact Hy.
-    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
-      * left. apply in_app_iff. right. exact Hy.
-      * right. exact Hy.
-  - apply in_filter_neq in Hy as [Hy Hz].
-    apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
-    + left. apply filter_neq_in; [exact Hy | exact Hz].
-    + right. exact Hy.
-  - apply in_app_iff in Hy as [Hy|Hy].
-    + apply in_filter_neq in Hy as [Hy Hz].
-      apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
-      * left. apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hz].
-      * right. exact Hy.
-    + left. apply in_app_iff. right. exact Hy.
-  - apply in_app_iff in Hy as [Hy|Hy].
-    + left. apply in_app_iff. left. exact Hy.
-    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
-      * left. apply in_app_iff. right. exact Hy.
-      * right. exact Hy.
-Qed.
-
-Lemma nred_fv : forall t t', nred t t' -> incl (nfv t') (nfv t).
-Proof.
-  intros t t' H. induction H; simpl; unfold incl in *.
-  - intros y Hy. exact Hy.
-  - intros y Hy. apply in_app_iff. left.
-    apply filter_neq_in; [exact Hy | intro E; apply H; subst; exact Hy].
-  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
-    + apply in_filter_neq in Hy as [Hy Hne].
-      apply (nplug_esub_fv C X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
-      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
-      * apply in_app_iff. right. exact Hy.
-    + apply in_app_iff. right. exact Hy.
-  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
-    + apply in_filter_neq in Hy as [Hy Hne].
-      apply (nplug_fv_upper C u (NVar x)) in Hy. apply in_app_iff in Hy as [Hy|Hy].
-      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
-      * apply in_app_iff. right. exact Hy.
-    + apply in_app_iff. right. exact Hy.
-  - apply nplug_fv_mono. exact IHnred.
-Qed.
-
-Print Assumptions nplug_esub_fv.
-Print Assumptions nred_fv.
-
 Lemma in_filter_neq_iff : forall z a l,
   In z (filter (fun w => negb (Nat.eqb w a)) l) <-> In z l /\ z <> a.
 Proof.
@@ -311,92 +270,6 @@ Proof.
   - intros [Hl Hne]. apply filter_In. split; [exact Hl |].
     apply Nat.eqb_neq in Hne. rewrite Hne. reflexivity.
 Qed.
-
-Lemma Es_fv_both : forall t u, Es t u ->
-  incl (nfv t) (nfv u) /\ incl (nfv u) (nfv t).
-Proof.
-  apply Es_ind.
-  - intros t0. split; unfold incl; auto.
-  - intros t0 u0 H1 IH1. split.
-    + apply (proj2 IH1).
-    + apply (proj1 IH1).
-  - intros t0 u0 v0 H1 H2 IH1 IH2. split.
-    + intros z Hz. apply (proj1 IH2). apply (proj1 H2). exact Hz.
-    + intros z Hz. apply (proj2 H2). apply (proj2 IH2). exact Hz.
-  - intros t0 x0 u0 y0 v0 Hyx Hyu Hxv. split; unfold incl; intros z Hz; simpl in *;
-    apply in_app_iff in Hz as [Hz|Hz].
-    + apply in_filter_neq_iff in Hz as [Hz Hy]. apply in_app_iff in Hz as [Hz|Hz].
-      * apply in_filter_neq_iff in Hz as [Hz Hx].
-        apply in_app_iff. left. apply in_filter_neq_iff. split; [| exact Hx].
-        apply in_app_iff. left. apply in_filter_neq_iff. split; [exact Hz | exact Hy].
-      * apply in_app_iff. right. exact Hz.
-    + apply in_app_iff. left. apply in_filter_neq_iff. split; [| ].
-      * apply in_app_iff. right. exact Hz.
-      * intro E. apply Hxv. subst z. exact Hz.
-    + apply in_filter_neq_iff in Hz as [Hz Hx]. apply in_app_iff in Hz as [Hz|Hz].
-      * apply in_filter_neq_iff in Hz as [Hz Hy].
-        apply in_app_iff. left. apply in_filter_neq_iff. split; [| exact Hy].
-        apply in_app_iff. left. apply in_filter_neq_iff. split; [exact Hz | exact Hx].
-      * apply in_app_iff. right. exact Hz.
-    + apply in_app_iff. left. apply in_filter_neq_iff. split; [| ].
-      * apply in_app_iff. right. exact Hz.
-      * intro E. apply Hyu. subst z. exact Hz.
-  - intros C0 t0 t0' H1 IH1. split; apply nplug_fv_mono.
-    + apply (proj1 IH1).
-    + apply (proj2 IH1).
-Qed.
-
-Lemma Es_fv : forall t u, Es t u -> forall z, In z (nfv t) <-> In z (nfv u).
-Proof.
-  intros t u H z. destruct (Es_fv_both t u H) as [Htu Hut]. split.
-  - apply Htu.
-  - apply Hut.
-Qed.
-
-Print Assumptions in_filter_neq_iff.
-Print Assumptions Es_fv.
-
-Fixpoint nvars (t : ntrm) : list atom :=
-  match t with
-  | NVar x => [x]
-  | NApp a b => nvars a ++ nvars b
-  | NLam x a => x :: nvars a
-  | NESub a x u => x :: (nvars a ++ nvars u)
-  | NMVar _ d => d
-  end.
-
-Definition rename_atom (x y z : atom) : atom :=
-  if Nat.eqb z x then y else z.
-
-Fixpoint rename_bound (x y : atom) (t : ntrm) : ntrm :=
-  match t with
-  | NVar z => NVar (rename_atom x y z)
-  | NApp a b => NApp (rename_bound x y a) (rename_bound x y b)
-  | NLam z a => NLam z (if Nat.eqb z x then a else rename_bound x y a)
-  | NESub a z u =>
-      NESub (if Nat.eqb z x then a else rename_bound x y a) z (rename_bound x y u)
-  | NMVar X d => NMVar X (map (rename_atom x y) d)
-  end.
-
-Definition fresh_atom (avoid : list atom) : atom := S (fold_right Nat.max 0 avoid).
-
-Definition freshen_binder (avoid : list atom) (a : ntrm) (x : atom) (u : ntrm) : ntrm :=
-  let y := fresh_atom (x :: (nvars a ++ nvars u ++ avoid)) in
-  NESub (rename_bound x y a) y u.
-
-Fixpoint freshen_substitutions (avoid : list atom) (t : ntrm) {struct t} : ntrm :=
-  match t with
-  | NVar x => NVar x
-  | NApp a b =>
-      let a' := freshen_substitutions (nvars b ++ avoid) a in
-      NApp a' (freshen_substitutions (nvars a' ++ avoid) b)
-  | NLam x a => NLam x (freshen_substitutions (x :: avoid) a)
-  | NESub a x u =>
-      let a' := freshen_substitutions (x :: (nvars u ++ avoid)) a in
-      let u' := freshen_substitutions (x :: (nvars a' ++ avoid)) u in
-      freshen_binder avoid a' x u'
-  | NMVar X d => NMVar X d
-  end.
 
 Lemma in_fold_max : forall l x, In x l -> x <= fold_right Nat.max 0 l.
 Proof.
@@ -480,6 +353,138 @@ Proof.
   rewrite rename_bound_fv by assumption.
   destruct (Nat.eq_dec z y) as [-> | Hzy]; intuition congruence.
 Qed.
+
+Inductive nred_core : ntrm -> ntrm -> Prop :=
+| ncore_B : forall t x u, nred_core (NApp (NLam x t) u) (freshen_binder [] t x u)
+| ncore_Gc : forall t x u, ~ In x (nfv t) -> nred_core (NESub t x u) t
+| ncore_R : forall C x u phi,
+    In x phi -> (forall y, In y (nfv u) -> In y phi) -> cavoid C phi = true ->
+    ~ In x (nfv u) ->
+    nred_core (NESub (nplug C (NVar x)) x u) (NESub (nplug C u) x u)
+| ncore_ctx : forall C t t', nred_core t t' -> nred_core (nplug C t) (nplug C t').
+
+Lemma nred_core_fv : forall t t', nred_core t t' -> incl (nfv t') (nfv t).
+Proof.
+  intros t t' H. induction H; simpl; unfold incl in *.
+  - intros y Hy. exact ((proj1 (freshen_binder_fv [] t x u y)) Hy).
+  - intros y Hy. apply in_app_iff. left.
+    apply filter_neq_in; [exact Hy | intro E; apply H; subst; exact Hy].
+  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hne].
+      apply (nplug_fv_upper C u (NVar x)) in Hy. apply in_app_iff in Hy as [Hy|Hy].
+      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
+      * apply in_app_iff. right. exact Hy.
+    + apply in_app_iff. right. exact Hy.
+  - apply nplug_fv_mono. exact IHnred_core.
+Qed.
+
+Print Assumptions nplug_fv_mono.
+Print Assumptions nplug_fv_upper.
+Print Assumptions nred_core_fv.
+
+Lemma nplug_esub_fv : forall C X d x u y,
+  y <> x ->
+  In y (nfv (nplug C (NESub (NMVar X d) x u))) ->
+  In y (nfv (nplug C (NMVar X d))) \/ In y (nfv u).
+Proof.
+  induction C; intros X d x u y Hne Hy; simpl in *.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + left. apply in_filter_neq in Hy as [Hy _]. simpl. exact Hy.
+    + right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. left. exact Hy.
+      * right. exact Hy.
+    + left. apply in_app_iff. right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + left. apply in_app_iff. left. exact Hy.
+    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. right. exact Hy.
+      * right. exact Hy.
+  - apply in_filter_neq in Hy as [Hy Hz].
+    apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+    + left. apply filter_neq_in; [exact Hy | exact Hz].
+    + right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hz].
+      apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hz].
+      * right. exact Hy.
+    + left. apply in_app_iff. right. exact Hy.
+  - apply in_app_iff in Hy as [Hy|Hy].
+    + left. apply in_app_iff. left. exact Hy.
+    + apply (IHC X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * left. apply in_app_iff. right. exact Hy.
+      * right. exact Hy.
+Qed.
+
+Lemma nred_fv : forall t t', nred t t' -> incl (nfv t') (nfv t).
+Proof.
+  intros t t' H. induction H; simpl; unfold incl in *.
+  - intros y Hy. exact ((proj1 (freshen_binder_fv [] t x u y)) Hy).
+  - intros y Hy. apply in_app_iff. left.
+    apply filter_neq_in; [exact Hy | intro E; apply H; subst; exact Hy].
+  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hne].
+      apply (nplug_esub_fv C X d x u y Hne) in Hy. destruct Hy as [Hy|Hy].
+      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
+      * apply in_app_iff. right. exact Hy.
+    + apply in_app_iff. right. exact Hy.
+  - intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
+    + apply in_filter_neq in Hy as [Hy Hne].
+      apply (nplug_fv_upper C u (NVar x)) in Hy. apply in_app_iff in Hy as [Hy|Hy].
+      * apply in_app_iff. left. apply filter_neq_in; [exact Hy | exact Hne].
+      * apply in_app_iff. right. exact Hy.
+    + apply in_app_iff. right. exact Hy.
+  - apply nplug_fv_mono. exact IHnred.
+Qed.
+
+Print Assumptions nplug_esub_fv.
+Print Assumptions nred_fv.
+
+Lemma Es_fv_both : forall t u, Es t u ->
+  incl (nfv t) (nfv u) /\ incl (nfv u) (nfv t).
+Proof.
+  apply Es_ind.
+  - intros t0. split; unfold incl; auto.
+  - intros t0 u0 H1 IH1. split.
+    + apply (proj2 IH1).
+    + apply (proj1 IH1).
+  - intros t0 u0 v0 H1 H2 IH1 IH2. split.
+    + intros z Hz. apply (proj1 IH2). apply (proj1 H2). exact Hz.
+    + intros z Hz. apply (proj2 H2). apply (proj2 IH2). exact Hz.
+  - intros t0 x0 u0 y0 v0 Hyx Hyu Hxv. split; unfold incl; intros z Hz; simpl in *;
+    apply in_app_iff in Hz as [Hz|Hz].
+    + apply in_filter_neq_iff in Hz as [Hz Hy]. apply in_app_iff in Hz as [Hz|Hz].
+      * apply in_filter_neq_iff in Hz as [Hz Hx].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [| exact Hx].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [exact Hz | exact Hy].
+      * apply in_app_iff. right. exact Hz.
+    + apply in_app_iff. left. apply in_filter_neq_iff. split; [| ].
+      * apply in_app_iff. right. exact Hz.
+      * intro E. apply Hxv. subst z. exact Hz.
+    + apply in_filter_neq_iff in Hz as [Hz Hx]. apply in_app_iff in Hz as [Hz|Hz].
+      * apply in_filter_neq_iff in Hz as [Hz Hy].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [| exact Hy].
+        apply in_app_iff. left. apply in_filter_neq_iff. split; [exact Hz | exact Hx].
+      * apply in_app_iff. right. exact Hz.
+    + apply in_app_iff. left. apply in_filter_neq_iff. split; [| ].
+      * apply in_app_iff. right. exact Hz.
+      * intro E. apply Hyu. subst z. exact Hz.
+  - intros C0 t0 t0' H1 IH1. split; apply nplug_fv_mono.
+    + apply (proj1 IH1).
+    + apply (proj2 IH1).
+Qed.
+
+Lemma Es_fv : forall t u, Es t u -> forall z, In z (nfv t) <-> In z (nfv u).
+Proof.
+  intros t u H z. destruct (Es_fv_both t u H) as [Htu Hut]. split.
+  - apply Htu.
+  - apply Hut.
+Qed.
+
+Print Assumptions in_filter_neq_iff.
+Print Assumptions Es_fv.
 
 Lemma freshen_substitutions_fv : forall t avoid z,
   In z (nfv (freshen_substitutions avoid t)) <-> In z (nfv t).
@@ -593,3 +598,65 @@ Print Assumptions freshen_self_reference.
 Print Assumptions freshen_shadowed_lambda.
 Print Assumptions rename_nested_substitution.
 Print Assumptions freshen_annotation.
+
+Lemma nplug_var : forall C t x,
+  nplug C t = NVar x -> C = nHole /\ t = NVar x.
+Proof.
+  destruct C; intros t x H; simpl in H; try discriminate.
+  split; [reflexivity | exact H].
+Qed.
+
+Lemma nred_not_var : forall t u,
+  nred t u -> forall x, t <> NVar x.
+Proof.
+  intros t u Hr. induction Hr; intros z E; try discriminate.
+  destruct C; simpl in E; try discriminate. apply (IHHr z). exact E.
+Qed.
+
+Theorem nred_selfsub_irreducible : forall x u,
+  ~ nred (NESub (NVar x) x (NVar x)) u.
+Proof.
+  intros x u Hr. remember (NESub (NVar x) x (NVar x)) as t eqn:E.
+  revert x E. induction Hr; intros z E.
+  - discriminate E.
+  - inversion E; subst. apply H. simpl. auto.
+  - injection E as Hbody Hbinder Harg.
+    apply nplug_var in Hbody. destruct Hbody as [_ Hbad]. discriminate Hbad.
+  - injection E as Hbody Hbinder Harg. subst x u.
+    apply H2. simpl. auto.
+  - destruct C; simpl in E; try discriminate.
+    + apply (IHHr z). exact E.
+    + injection E as Hbody Hbinder Harg.
+      apply nplug_var in Hbody. destruct Hbody as [_ Hvar].
+      apply (nred_not_var t t' Hr z). exact Hvar.
+    + injection E as Hbody Hbinder Harg.
+      apply nplug_var in Harg. destruct Harg as [_ Hvar].
+      apply (nred_not_var t t' Hr z). exact Hvar.
+Qed.
+
+Lemma nred_R_fresh : forall x y, x <> y ->
+  nred (NESub (NVar x) x (NVar y)) (NESub (NVar y) x (NVar y)).
+Proof.
+  intros x y Hxy. apply nred_R with (C := nHole) (phi := [x; y]).
+  - simpl. auto.
+  - intros z Hz. simpl in Hz. destruct Hz as [<- | []]. simpl. auto.
+  - reflexivity.
+  - simpl. intros [H | []]. congruence.
+Qed.
+
+Example freshened_R_progress :
+  nred (freshen_substitutions [] (NESub (NVar 0) 0 (NVar 0)))
+    (NESub (NVar 0) 1 (NVar 0)).
+Proof. apply nred_R_fresh. discriminate. Qed.
+
+Print Assumptions nplug_var.
+Print Assumptions nred_not_var.
+Print Assumptions nred_selfsub_irreducible.
+Print Assumptions nred_R_fresh.
+Print Assumptions freshened_R_progress.
+
+Example beta_freshens_substitution :
+  nred (NApp (NLam 0 (NVar 0)) (NVar 0)) (NESub (NVar 1) 1 (NVar 0)).
+Proof. apply nred_B. Qed.
+
+Print Assumptions beta_freshens_substitution.

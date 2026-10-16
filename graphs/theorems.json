@@ -28,8 +28,38 @@
       "depends": []
     },
     {
+      "id": "fvs_lift_many",
+      "label": "fvs_lift_many",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "lift_many_one",
+      "label": "lift_many_one",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
       "id": "lift_lc",
       "label": "lift_lc",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "fvs_lower",
+      "label": "fvs_lower",
       "kind": "infra",
       "status": "proved",
       "milestone": "M1",
@@ -118,7 +148,7 @@
       "section": "",
       "file": "theory/Binding.v",
       "depends": [
-        "fvs_lift",
+        "fvs_lift_many",
         "open_rec_bvar",
         "open_rec_bvar_neq"
       ]
@@ -144,7 +174,8 @@
       "section": "",
       "file": "theory/Binding.v",
       "depends": [
-        "lift_0_lc"
+        "lift_0_lc",
+        "lift_many_one"
       ]
     },
     {
@@ -169,6 +200,26 @@
         "close_rec_fvs",
         "open_rec_fvs"
       ]
+    },
+    {
+      "id": "lift_many_lc_at",
+      "label": "lift_many_lc_at",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
+    },
+    {
+      "id": "lower_lc_at",
+      "label": "lower_lc_at",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Binding.v",
+      "depends": []
     },
     {
       "id": "Star_trans",
@@ -310,6 +361,26 @@
       "depends": []
     },
     {
+      "id": "of_trm_lower",
+      "label": "of_trm_lower",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
+      "id": "of_trm_lift_many",
+      "label": "of_trm_lift_many",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
       "id": "of_trm_open",
       "label": "of_trm_open",
       "kind": "infra",
@@ -318,7 +389,7 @@
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
-        "of_trm_lift"
+        "of_trm_lift_many"
       ]
     },
     {
@@ -352,6 +423,16 @@
       "depends": []
     },
     {
+      "id": "mfvs_lift_many_m",
+      "label": "mfvs_lift_many_m",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/Metaterm.v",
+      "depends": []
+    },
+    {
       "id": "mfvs_close_m",
       "label": "mfvs_close_m",
       "kind": "infra",
@@ -370,7 +451,7 @@
       "section": "",
       "file": "theory/Metaterm.v",
       "depends": [
-        "mfvs_lift_m"
+        "mfvs_lift_many_m"
       ]
     },
     {
@@ -553,6 +634,28 @@
       "depends": []
     },
     {
+      "id": "occurs_lift_many_aux",
+      "label": "occurs_lift_many_aux",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": []
+    },
+    {
+      "id": "occurs_lift_many",
+      "label": "occurs_lift_many",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M2",
+      "section": "",
+      "file": "theory/Metatheory.v",
+      "depends": [
+        "occurs_lift_many_aux"
+      ]
+    },
+    {
       "id": "zdecs_nonempty",
       "label": "zdecs_nonempty",
       "kind": "infra",
@@ -572,7 +675,7 @@
       "file": "theory/Metatheory.v",
       "depends": [
         "occurs_count_false",
-        "occurs_lift_self"
+        "occurs_lift_many"
       ]
     },
     {
@@ -584,7 +687,7 @@
       "section": "",
       "file": "theory/Metatheory.v",
       "depends": [
-        "occurs_lift_self",
+        "occurs_lift_many",
         "open_rec_occurs_false"
       ]
     },
@@ -626,7 +729,7 @@
       "section": "",
       "file": "theory/Metatheory.v",
       "depends": [
-        "fvs_lift"
+        "fvs_lift_many"
       ]
     },
     {
@@ -648,6 +751,7 @@
       "section": "",
       "file": "theory/Metatheory.v",
       "depends": [
+        "fvs_lower",
         "fvs_zplug_lift"
       ]
     },
@@ -1010,50 +1114,28 @@
       "depends": []
     },
     {
-      "id": "nred_R_selfloop",
-      "label": "nred_R_selfloop",
-      "kind": "infra",
-      "status": "proved",
-      "milestone": "M5",
-      "section": "",
-      "file": "theory/NamedMeasure.v",
-      "depends": []
-    },
-    {
-      "id": "current_sm_not_terminating",
-      "label": "current_sm_not_terminating",
+      "id": "nred_R_selfloop_excluded",
+      "label": "nred_R_selfloop_excluded",
       "kind": "infra",
       "status": "proved",
       "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeasure.v",
       "depends": [
-        "nred_R_selfloop"
+        "nred_selfsub_irreducible"
       ]
     },
     {
-      "id": "subred_selfloop",
-      "label": "subred_selfloop",
+      "id": "subred_R_fresh",
+      "label": "subred_R_fresh",
       "kind": "infra",
       "status": "proved",
       "milestone": "M5",
       "section": "",
       "file": "theory/NamedMeasure.v",
       "depends": [
-        "nred_R_selfloop",
+        "nred_R_fresh",
         "subred_nred"
-      ]
-    },
-    {
-      "id": "current_subred_not_terminating",
-      "label": "current_subred_not_terminating",
-      "kind": "infra",
-      "status": "proved",
-      "milestone": "M5",
-      "section": "",
-      "file": "theory/NamedMeasure.v",
-      "depends": [
-        "subred_selfloop"
       ]
     },
     {
@@ -1183,6 +1265,88 @@
       ]
     },
     {
+      "id": "in_filter_neq_iff",
+      "label": "in_filter_neq_iff",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "in_fold_max",
+      "label": "in_fold_max",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "fresh_atom_notin",
+      "label": "fresh_atom_notin",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "in_fold_max"
+      ]
+    },
+    {
+      "id": "nfv_in_nvars",
+      "label": "nfv_in_nvars",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "in_filter_neq"
+      ]
+    },
+    {
+      "id": "rename_atom_in",
+      "label": "rename_atom_in",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "rename_bound_fv",
+      "label": "rename_bound_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "in_filter_neq_iff",
+        "rename_atom_in"
+      ]
+    },
+    {
+      "id": "freshen_binder_fv",
+      "label": "freshen_binder_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "fresh_atom_notin",
+        "in_filter_neq_iff",
+        "nfv_in_nvars",
+        "rename_bound_fv"
+      ]
+    },
+    {
       "id": "nred_core_fv",
       "label": "nred_core_fv",
       "kind": "infra",
@@ -1192,6 +1356,7 @@
       "file": "theory/NamedMeta.v",
       "depends": [
         "filter_neq_in",
+        "freshen_binder_fv",
         "in_filter_neq",
         "nplug_fv_mono",
         "nplug_fv_upper"
@@ -1220,21 +1385,12 @@
       "file": "theory/NamedMeta.v",
       "depends": [
         "filter_neq_in",
+        "freshen_binder_fv",
         "in_filter_neq",
         "nplug_esub_fv",
         "nplug_fv_mono",
         "nplug_fv_upper"
       ]
-    },
-    {
-      "id": "in_filter_neq_iff",
-      "label": "in_filter_neq_iff",
-      "kind": "infra",
-      "status": "proved",
-      "milestone": "M5",
-      "section": "",
-      "file": "theory/NamedMeta.v",
-      "depends": []
     },
     {
       "id": "Es_fv_both",
@@ -1260,6 +1416,112 @@
       "depends": [
         "Es_fv_both"
       ]
+    },
+    {
+      "id": "freshen_substitutions_fv",
+      "label": "freshen_substitutions_fv",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "freshen_binder_fv",
+        "in_filter_neq_iff"
+      ]
+    },
+    {
+      "id": "rename_bound_fresh",
+      "label": "rename_bound_fresh",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "rename_bound_fv"
+      ]
+    },
+    {
+      "id": "freshen_binder_fresh",
+      "label": "freshen_binder_fresh",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "fresh_atom_notin",
+        "nfv_in_nvars",
+        "rename_bound_fresh"
+      ]
+    },
+    {
+      "id": "freshen_substitutions_fresh",
+      "label": "freshen_substitutions_fresh",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "freshen_binder_fresh"
+      ]
+    },
+    {
+      "id": "freshen_binder_avoids",
+      "label": "freshen_binder_avoids",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "fresh_atom_notin"
+      ]
+    },
+    {
+      "id": "nplug_var",
+      "label": "nplug_var",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "nred_not_var",
+      "label": "nred_not_var",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
+    },
+    {
+      "id": "nred_selfsub_irreducible",
+      "label": "nred_selfsub_irreducible",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": [
+        "nplug_var",
+        "nred_not_var"
+      ]
+    },
+    {
+      "id": "nred_R_fresh",
+      "label": "nred_R_fresh",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M5",
+      "section": "",
+      "file": "theory/NamedMeta.v",
+      "depends": []
     },
     {
       "id": "par_red1_iff",
@@ -1618,6 +1880,79 @@
       ]
     },
     {
+      "id": "zplug_lift_lc_at",
+      "label": "zplug_lift_lc_at",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "lift_many_lc_at"
+      ]
+    },
+    {
+      "id": "red1_root_lc_at",
+      "label": "red1_root_lc_at",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "lower_lc_at",
+        "zplug_lift_lc_at"
+      ]
+    },
+    {
+      "id": "plug_lc_at_transport",
+      "label": "plug_lc_at_transport",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": []
+    },
+    {
+      "id": "red1r_lc_at",
+      "label": "red1r_lc_at",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "plug_lc_at_transport",
+        "red1_root_lc_at"
+      ]
+    },
+    {
+      "id": "red1_lc",
+      "label": "red1_lc",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "red1r_lc_at"
+      ]
+    },
+    {
+      "id": "steps_lc",
+      "label": "steps_lc",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M1",
+      "section": "",
+      "file": "theory/Reduction.v",
+      "depends": [
+        "red1_lc",
+        "steps_sound_red1"
+      ]
+    },
+    {
       "id": "open_rec_app",
       "label": "open_rec_app",
       "kind": "infra",
@@ -1919,6 +2254,16 @@
       "depends": []
     },
     {
+      "id": "es_count_lower",
+      "label": "es_count_lower",
+      "kind": "infra",
+      "status": "proved",
+      "milestone": "M3",
+      "section": "",
+      "file": "theory/Subsystem.v",
+      "depends": []
+    },
+    {
       "id": "red_gc_measure",
       "label": "red_gc_measure",
       "kind": "infra",
@@ -1927,6 +2272,7 @@
       "section": "",
       "file": "theory/Subsystem.v",
       "depends": [
+        "es_count_lower",
         "es_count_plug_mono"
       ]
     },
