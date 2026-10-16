@@ -69,6 +69,26 @@ Proof.
   - rewrite IHt1, IHt2. reflexivity.
 Qed.
 
+Lemma occurs_lift_many_aux : forall t n c k,
+  c <= k -> k < c + n -> occurs k (lift_many n c t) = false.
+Proof.
+  induction t; intros amount c k Hck Hkn; simpl.
+  - destruct (Nat.ltb n c) eqn:E; apply Nat.eqb_neq.
+    + apply Nat.ltb_lt in E. lia.
+    + apply Nat.ltb_ge in E. lia.
+  - reflexivity.
+  - rewrite IHt1, IHt2; lia.
+  - apply IHt; lia.
+  - rewrite IHt1, IHt2; lia.
+Qed.
+
+Lemma occurs_lift_many : forall n t k,
+  k < n -> occurs k (lift_many n 0 t) = false.
+Proof. intros n t k H. apply occurs_lift_many_aux; lia. Qed.
+
+Print Assumptions occurs_lift_many_aux.
+Print Assumptions occurs_lift_many.
+
 Lemma zdecs_nonempty : forall t k, occurs k t = true -> exists C, In C (zdecs t k).
 Proof.
   induction t; intros k H; simpl in *.
@@ -95,7 +115,8 @@ Lemma occurs_count_zfill_plug : forall C k u,
 Proof.
   induction C; intros k u; simpl.
   - rewrite Nat.eqb_refl. simpl.
-    rewrite (occurs_count_false (lift k u) k (occurs_lift_self u k)). reflexivity.
+    rewrite (occurs_count_false (lift_many (S k) 0 u) k
+      (occurs_lift_many (S k) u k (Nat.lt_succ_diag_r k))). reflexivity.
   - rewrite (IHC k u). reflexivity.
   - rewrite (IHC k u). rewrite Nat.add_succ_r. reflexivity.
   - rewrite (IHC (S k) u). reflexivity.
@@ -107,7 +128,8 @@ Lemma open_rec_zplug_lift : forall C k u,
   open_rec k u (zplug_lift C k u) = open_rec k u (zfill C k).
 Proof.
   induction C; intros k u; simpl.
-  - rewrite (open_rec_occurs_false (lift k u) u k (occurs_lift_self u k)).
+  - rewrite (open_rec_occurs_false (lift_many (S k) 0 u) u k
+      (occurs_lift_many (S k) u k (Nat.lt_succ_diag_r k))).
     rewrite Nat.eqb_refl. reflexivity.
   - rewrite (IHC k u). reflexivity.
   - rewrite (IHC k u). reflexivity.
@@ -145,7 +167,7 @@ Lemma fvs_zplug_lift : forall C k u y,
   In y (fvs (zplug_lift C k u)) -> In y (fvs u) \/ In y (fvs (zfill C k)).
 Proof.
   induction C; intros k u y H; simpl in *.
-  - left. rewrite <- (fvs_lift u k). exact H.
+  - left. rewrite <- (fvs_lift_many (S k) u 0). exact H.
   - apply in_app_iff in H as [H|H].
     + destruct (IHC k u y H) as [Hl|Hr]. left; exact Hl.
       right; apply in_app_iff; left; exact Hr.

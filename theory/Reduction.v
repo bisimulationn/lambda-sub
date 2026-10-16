@@ -1,6 +1,6 @@
 From Stdlib Require Import List Bool Arith Lia PeanoNat.
 Import ListNotations.
-From LambdaSub Require Import ExecReducer.
+From LambdaSub Require Import ExecReducer Binding.
 
 Fixpoint zfill (C : zctx) (k : nat) : trm :=
   match C with
@@ -300,3 +300,71 @@ Qed.
 Print Assumptions nf_iff_steps_nil.
 Print Assumptions normal_form_iff_nf.
 Print Assumptions nf_dec.
+
+Lemma zplug_lift_lc_at : forall C d k u,
+  lc_at (S (d + k)) (zfill C k) -> lc_at d u ->
+  lc_at (S (d + k)) (zplug_lift C k u).
+Proof.
+  induction C; intros d k v Hbody Hv; simpl in *.
+  - replace (S (d + k)) with (S k + d) by lia.
+    apply lift_many_lc_at; [exact Hv | lia].
+  - destruct Hbody as [Ha Hb]. split; [apply IHC |]; assumption.
+  - destruct Hbody as [Ha Hb]. split; [| apply IHC]; assumption.
+  - replace (S (S (d + k))) with (S (d + S k)) in * by lia.
+    apply IHC; assumption.
+  - destruct Hbody as [Ha Hb]. split.
+    + replace (S (S (d + k))) with (S (d + S k)) in * by lia.
+      apply IHC; assumption.
+    + exact Hb.
+  - destruct Hbody as [Ha Hb]. split; [| apply IHC]; assumption.
+Qed.
+
+Lemma red1_root_lc_at : forall r a b,
+  red1_root r a b -> forall d, lc_at d a -> lc_at d b.
+Proof.
+  intros r a b Hr. destruct Hr; intros d Hlc; simpl in *.
+  - exact Hlc.
+  - destruct Hlc as [Hb Hu]. apply lower_lc_at; try assumption. lia.
+  - destruct Hlc as [Hb Hu]. split; [| exact Hu].
+    rewrite <- H in Hb.
+    replace (S d) with (S (d + 0)) by lia.
+    apply zplug_lift_lc_at; [rewrite Nat.add_0_r; exact Hb | exact Hu].
+Qed.
+
+Lemma plug_lc_at_transport : forall C a b,
+  (forall d, lc_at d a -> lc_at d b) ->
+  forall d, lc_at d (plug C a) -> lc_at d (plug C b).
+Proof.
+  induction C; intros a b Hstep d Hlc; simpl in *.
+  - apply Hstep. exact Hlc.
+  - destruct Hlc as [Ha Hu]. split; [apply IHC with a |]; assumption.
+  - destruct Hlc as [Hu Ha]. split; [| apply IHC with a]; assumption.
+  - apply IHC with a; assumption.
+  - destruct Hlc as [Ha Hu]. split; [apply IHC with a |]; assumption.
+  - destruct Hlc as [Hu Ha]. split; [| apply IHC with a]; assumption.
+Qed.
+
+Lemma red1r_lc_at : forall r a b,
+  red1r r a b -> forall d, lc_at d a -> lc_at d b.
+Proof.
+  intros r a b Hr. induction Hr; intros d Hlc.
+  - apply red1_root_lc_at with r t; assumption.
+  - apply plug_lc_at_transport with t; assumption.
+Qed.
+
+Theorem red1_lc : forall a b, red1 a b -> lc a -> lc b.
+Proof. intros a b [r Hr] Hlc. apply red1r_lc_at with r a; assumption. Qed.
+
+Corollary steps_lc : forall t r u,
+  lc t -> In (r, u) (steps t) -> lc u.
+Proof.
+  intros t r u Hlc Hin. apply red1_lc with t; [| exact Hlc].
+  apply steps_sound_red1 with r. exact Hin.
+Qed.
+
+Print Assumptions zplug_lift_lc_at.
+Print Assumptions red1_root_lc_at.
+Print Assumptions plug_lc_at_transport.
+Print Assumptions red1r_lc_at.
+Print Assumptions red1_lc.
+Print Assumptions steps_lc.

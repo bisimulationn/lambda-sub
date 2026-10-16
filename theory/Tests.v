@@ -83,6 +83,37 @@ Print Assumptions gc_under_lambda.
 Print Assumptions gc_under_substitution.
 Print Assumptions gc_preserves_inner_binder.
 
+Example r_under_two_binders :
+  root_steps (ESub (Lam (Lam (BVar 2))) (BVar 0)) =
+  [(RR, ESub (Lam (Lam (BVar 3))) (BVar 0))].
+Proof. reflexivity. Qed.
+
+Example open_outer_reference :
+  lower 0 (open_rec 0 (BVar 0) (Lam (Lam (BVar 2)))) =
+  Lam (Lam (BVar 2)).
+Proof. reflexivity. Qed.
+
+Example gc_closed_under_lambda :
+  red1 (Lam (ESub (BVar 1) (FVar 7))) (Lam (BVar 0)).
+Proof.
+  exists RGc. apply (rctx RGc (GLam GHole)).
+  apply red1r_root. apply rGc. reflexivity.
+Qed.
+
+Example nested_r_preserves_closure :
+  lc (Lam (ESub (Lam (Lam (BVar 3))) (BVar 0))).
+Proof.
+  apply red1_lc with (Lam (ESub (Lam (Lam (BVar 2))) (BVar 0))).
+  - exists RR. apply (rctx RR (GLam GHole)).
+    apply red1r_root. apply rR with (C := ZLam (ZLam ZTop)). reflexivity.
+  - unfold lc. simpl. split; lia.
+Qed.
+
+Print Assumptions r_under_two_binders.
+Print Assumptions open_outer_reference.
+Print Assumptions gc_closed_under_lambda.
+Print Assumptions nested_r_preserves_closure.
+
 Lemma corpus_complete : forall t r t', In t corpus -> red1r r t t' -> In (r,t') (steps t).
 Proof. intros t r t' _ H. apply steps_complete. exact H. Qed.
 
