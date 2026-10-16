@@ -4,7 +4,7 @@ From Stdlib Require Import Wf_nat.
 From LambdaSub Require Import ExecReducer Binding Reduction Metatheory Closure.
 
 Inductive red_sub_root : trm -> trm -> Prop :=
-| rs_gc : forall body u, occurs0 body = false -> red_sub_root (ESub body u) body
+| rs_gc : forall body u, occurs0 body = false -> red_sub_root (ESub body u) (lower 0 body)
 | rs_r : forall C body u, zfill C 0 = body ->
     red_sub_root (ESub body u) (ESub (zplug_lift C 0 u) u).
 
@@ -29,7 +29,7 @@ Qed.
 Lemma red_sub_context : forall C t t', red_sub t t' -> red_sub (plug C t) (plug C t').
 Proof. intros. apply red_sub_ctx. exact H. Qed.
 
-Lemma red_sub_gc : forall body u, occurs0 body = false -> red_sub (ESub body u) body.
+Lemma red_sub_gc : forall body u, occurs0 body = false -> red_sub (ESub body u) (lower 0 body).
 Proof. intros. apply red_sub_base. apply rs_gc. exact H. Qed.
 
 Lemma red_sub_r : forall C body u, zfill C 0 = body ->
@@ -74,7 +74,7 @@ Proof.
 Qed.
 
 Lemma full_comp_aux_sub : forall n body u, occurs_count 0 body <= n ->
-  Plus red_sub (ESub body u) (open_rec 0 u body).
+  Plus red_sub (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof.
   induction n as [| n IH]; intros body u Hn.
   - assert (Hc : occurs_count 0 body = 0) by lia.
@@ -95,10 +95,10 @@ Proof.
       apply plus1. apply red_sub_gc. exact E.
 Qed.
 
-Lemma plus_red_sub_full_comp : forall body u, Plus red_sub (ESub body u) (open_rec 0 u body).
+Lemma plus_red_sub_full_comp : forall body u, Plus red_sub (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof. intros. apply (full_comp_aux_sub (occurs_count 0 body) body u). lia. Qed.
 
-Lemma star_red_sub_full_comp : forall body u, Star red_sub (ESub body u) (open_rec 0 u body).
+Lemma star_red_sub_full_comp : forall body u, Star red_sub (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof. intros. apply Plus_to_Star. apply plus_red_sub_full_comp. Qed.
 
 Print Assumptions Star_red_sub_context.
@@ -114,7 +114,7 @@ Fixpoint es_count (t : trm) : nat :=
   end.
 
 Inductive red_gc : trm -> trm -> Prop :=
-| rgc_root : forall body u, occurs0 body = false -> red_gc (ESub body u) body
+| rgc_root : forall body u, occurs0 body = false -> red_gc (ESub body u) (lower 0 body)
 | rgc_ctx : forall C t t', red_gc t t' -> red_gc (plug C t) (plug C t').
 
 Lemma es_count_plug_mono : forall C t t',
@@ -129,10 +129,20 @@ Proof.
   - pose proof (IHC a b H) as IH; lia.
 Qed.
 
+Lemma es_count_lower : forall t k, es_count (lower k t) = es_count t.
+Proof.
+  induction t; intros k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - apply IHt.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Print Assumptions es_count_lower.
+
 Lemma red_gc_measure : forall a b, red_gc a b -> es_count b < es_count a.
 Proof.
   intros a b H. induction H.
-  - simpl. lia.
+  - simpl. rewrite es_count_lower. lia.
   - apply es_count_plug_mono. exact IHred_gc.
 Qed.
 

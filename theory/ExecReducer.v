@@ -31,6 +31,15 @@ Fixpoint lift (k : nat) (t : trm) : trm :=
   | ESub t1 t2 => ESub (lift (S k) t1) (lift k t2)
   end.
 
+Fixpoint lower (k : nat) (t : trm) : trm :=
+  match t with
+  | BVar n => BVar (if Nat.ltb k n then Nat.pred n else n)
+  | FVar x => FVar x
+  | App a b => App (lower k a) (lower k b)
+  | Lam a => Lam (lower (S k) a)
+  | ESub a b => ESub (lower (S k) a) (lower k b)
+  end.
+
 Fixpoint open_rec (k : nat) (u : trm) (t : trm) : trm :=
   match t with
   | BVar n => if Nat.eqb n k then lift k u else BVar n
@@ -118,7 +127,7 @@ Definition root_steps (t : trm) : list (rule * trm) :=
   match t with
   | App (Lam body) u => [(RB, ESub body u)]
   | ESub body u =>
-      (if occurs0 body then [] else [(RGc, body)])
+      (if occurs0 body then [] else [(RGc, lower 0 body)])
       ++ map (fun C => (RR, ESub (zplug_lift C 0 u) u)) (zdecs body 0)
   | _ => []
   end.

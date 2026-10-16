@@ -84,7 +84,7 @@ Qed.
 
 Inductive red1_root : rule -> trm -> trm -> Prop :=
 | rB : forall body u, red1_root RB (App (Lam body) u) (ESub body u)
-| rGc : forall body u, occurs0 body = false -> red1_root RGc (ESub body u) body
+| rGc : forall body u, occurs0 body = false -> red1_root RGc (ESub body u) (lower 0 body)
 | rR : forall C body u, zfill C 0 = body ->
     red1_root RR (ESub body u) (ESub (zplug_lift C 0 u) u).
 

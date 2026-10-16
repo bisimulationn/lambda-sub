@@ -61,6 +61,28 @@ Proof. reflexivity. Qed.
 Lemma corpus_sound : forall t p, In t corpus -> In p (steps t) -> red1r (fst p) t (snd p).
 Proof. intros t [r s] _ H. simpl. apply steps_sound. exact H. Qed.
 
+Example gc_outer_index :
+  root_steps (ESub (BVar 1) (FVar 7)) = [(RGc, BVar 0)].
+Proof. reflexivity. Qed.
+
+Example gc_under_lambda :
+  root_steps (ESub (Lam (BVar 2)) (FVar 7)) = [(RGc, Lam (BVar 1))].
+Proof. reflexivity. Qed.
+
+Example gc_under_substitution :
+  root_steps (ESub (ESub (BVar 2) (BVar 1)) (FVar 7)) =
+  [(RGc, ESub (BVar 1) (BVar 0))].
+Proof. reflexivity. Qed.
+
+Example gc_preserves_inner_binder :
+  root_steps (ESub (Lam (BVar 0)) (FVar 7)) = [(RGc, Lam (BVar 0))].
+Proof. reflexivity. Qed.
+
+Print Assumptions gc_outer_index.
+Print Assumptions gc_under_lambda.
+Print Assumptions gc_under_substitution.
+Print Assumptions gc_preserves_inner_binder.
+
 Lemma corpus_complete : forall t r t', In t corpus -> red1r r t t' -> In (r,t') (steps t).
 Proof. intros t r t' _ H. apply steps_complete. exact H. Qed.
 

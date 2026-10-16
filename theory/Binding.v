@@ -33,6 +33,16 @@ Proof.
   - destruct H as [Ha Hb]. rewrite (IHt1 (S d) Ha), (IHt2 d Hb). reflexivity.
 Qed.
 
+Lemma fvs_lower : forall t k, fvs (lower k t) = fvs t.
+Proof.
+  induction t; intros k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - apply IHt.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Print Assumptions fvs_lower.
+
 Lemma lift_0_lc : forall t, lc t -> lift 0 t = t.
 Proof. intros t H. apply lift_lc. exact H. Qed.
 

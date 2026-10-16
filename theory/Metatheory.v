@@ -117,7 +117,7 @@ Proof.
 Qed.
 
 Lemma full_comp_aux : forall n body u, occurs_count 0 body <= n ->
-  Plus red1 (ESub body u) (open_rec 0 u body).
+  Plus red1 (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof.
   induction n as [| n IH]; intros body u Hn.
   - assert (Hc : occurs_count 0 body = 0) by lia.
@@ -138,7 +138,7 @@ Proof.
       apply plus1. exists RGc. apply red1r_root. apply rGc. exact E.
 Qed.
 
-Lemma lemma_2_2_full_comp : forall body u, Plus red1 (ESub body u) (open_rec 0 u body).
+Lemma lemma_2_2_full_comp : forall body u, Plus red1 (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof. intros. apply (full_comp_aux (occurs_count 0 body) body u). lia. Qed.
 
 Lemma fvs_zplug_lift : forall C k u y,
@@ -188,7 +188,7 @@ Lemma red1_root_fv : forall r t t', red1_root r t t' -> incl (fvs t') (fvs t).
 Proof.
   intros r t t' HR. destruct HR.
   - simpl. unfold incl. intros y Hy. exact Hy.
-  - simpl. unfold incl. intros y Hy. apply in_app_iff. left. exact Hy.
+  - simpl. rewrite fvs_lower. unfold incl. intros y Hy. apply in_app_iff. left. exact Hy.
   - simpl. unfold incl. intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
     + destruct (fvs_zplug_lift C 0 u y Hy) as [Hu|Hb].
       * apply in_app_iff. right. exact Hu.
@@ -207,7 +207,7 @@ Lemma lemma_2_1_fv_preserved : forall t t', red1 t t' -> incl (fvs t') (fvs t).
 Proof. intros t t' [r Hr]. apply red1r_fv with r. exact Hr. Qed.
 
 Inductive beta1 : trm -> trm -> Prop :=
-| beta_root : forall body u, beta1 (App (Lam body) u) (open_rec 0 u body)
+| beta_root : forall body u, beta1 (App (Lam body) u) (lower 0 (open_rec 0 u body))
 | beta_ctx : forall C t t', beta1 t t' -> beta1 (plug C t) (plug C t').
 
 Lemma lemma_2_3_beta_sim : forall a b, beta1 a b -> Plus red1 a b.
