@@ -30,9 +30,29 @@ Fixpoint lift_m (k : nat) (t : mtrm) : mtrm :=
   | mESub a b => mESub (lift_m (S k) a) (lift_m k b)
   end.
 
+Fixpoint lift_many_m (n k : nat) (t : mtrm) : mtrm :=
+  match t with
+  | mBVar m => mBVar (if Nat.ltb m k then m else n + m)
+  | mFVar x => mFVar x
+  | mMVar x d => mMVar x d
+  | mApp a b => mApp (lift_many_m n k a) (lift_many_m n k b)
+  | mLam a => mLam (lift_many_m n (S k) a)
+  | mESub a b => mESub (lift_many_m n (S k) a) (lift_many_m n k b)
+  end.
+
+Fixpoint lower_m (k : nat) (t : mtrm) : mtrm :=
+  match t with
+  | mBVar n => mBVar (if Nat.ltb k n then Nat.pred n else n)
+  | mFVar x => mFVar x
+  | mMVar x d => mMVar x d
+  | mApp a b => mApp (lower_m k a) (lower_m k b)
+  | mLam a => mLam (lower_m (S k) a)
+  | mESub a b => mESub (lower_m (S k) a) (lower_m k b)
+  end.
+
 Fixpoint open_rec_m (k : nat) (u : mtrm) (t : mtrm) : mtrm :=
   match t with
-  | mBVar n => if Nat.eqb n k then lift_m k u else mBVar n
+  | mBVar n => if Nat.eqb n k then lift_many_m (S k) 0 u else mBVar n
   | mFVar x => mFVar x
   | mMVar x d => mMVar x d
   | mApp a b => mApp (open_rec_m k u a) (open_rec_m k u b)
@@ -72,12 +92,33 @@ Proof.
   - rewrite IHt1, IHt2. reflexivity.
 Qed.
 
+Lemma of_trm_lower : forall t k, of_trm (lower k t) = lower_m k (of_trm t).
+Proof.
+  induction t; intros k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - rewrite IHt. reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Print Assumptions of_trm_lower.
+
+Lemma of_trm_lift_many : forall t n k,
+  of_trm (lift_many n k t) = lift_many_m n k (of_trm t).
+Proof.
+  induction t; intros amount k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - rewrite IHt. reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Print Assumptions of_trm_lift_many.
+
 Lemma of_trm_open : forall t k u,
   of_trm (open_rec k u t) = open_rec_m k (of_trm u) (of_trm t).
 Proof.
   induction t; intros k u; simpl.
   - destruct (Nat.eqb n k) eqn:E; [| reflexivity].
-    apply Nat.eqb_eq in E. subst n. simpl. rewrite of_trm_lift. reflexivity.
+    apply Nat.eqb_eq in E. subst n. simpl. rewrite of_trm_lift_many. reflexivity.
   - reflexivity.
   - rewrite IHt1, IHt2. reflexivity.
   - rewrite IHt. reflexivity.
@@ -122,6 +163,16 @@ Proof.
   - rewrite IHt1, IHt2. reflexivity.
 Qed.
 
+Lemma mfvs_lift_many_m : forall t n k, mfvs (lift_many_m n k t) = mfvs t.
+Proof.
+  induction t; intros amount k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - apply IHt.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Print Assumptions mfvs_lift_many_m.
+
 Lemma mfvs_close_m : forall t x k y, In y (mfvs (close_rec_m x k t)) -> In y (mfvs t).
 Proof.
   induction t; intros x k y H; simpl in *.
@@ -145,7 +196,7 @@ Proof.
   induction t; intros k u y H; simpl in *.
   - destruct (Nat.eqb n k) eqn:E.
     + apply Nat.eqb_eq in E. subst n. simpl in H.
-      left. rewrite <- (mfvs_lift_m u k). exact H.
+      left. rewrite <- (mfvs_lift_many_m u (S k) 0). exact H.
     + simpl in H. destruct H.
   - right. exact H.
   - right. exact H.
@@ -227,7 +278,7 @@ Fixpoint mzfill (C : mzctx) (k : nat) : mtrm :=
 
 Fixpoint mzplug_lift (C : mzctx) (k : nat) (t : mtrm) : mtrm :=
   match C with
-  | mZTop => lift_m k t
+  | mZTop => lift_many_m (S k) 0 t
   | mZAppL C1 u => mApp (mzplug_lift C1 k t) u
   | mZAppR u C1 => mApp u (mzplug_lift C1 k t)
   | mZLam C1 => mLam (mzplug_lift C1 (S k) t)
@@ -249,7 +300,7 @@ Inductive mred : mtrm -> mtrm -> Prop :=
 | mred_emb : forall t t', red1 t t' -> mred (of_trm t) (of_trm t')
 | mred_ctx : forall C t t', mred t t' -> mred (mplug C t) (mplug C t')
 | mred_B : forall body u, mred (mApp (mLam body) u) (mESub body u)
-| mred_gc : forall body u, moccurs0 body = false -> mred (mESub body u) body
+| mred_gc : forall body u, moccurs0 body = false -> mred (mESub body u) (lower_m 0 body)
 | mred_r : forall C body u, mzfill C 0 = body ->
     mred (mESub body u) (mESub (mzplug_lift C 0 u) u).
 
@@ -285,7 +336,7 @@ Proof. intros. apply of_trm_moccurs. Qed.
 Lemma mred_B_intro : forall body u, mred (mApp (mLam body) u) (mESub body u).
 Proof. intros. apply mred_B. Qed.
 
-Lemma mred_gc_intro : forall body u, moccurs0 body = false -> mred (mESub body u) body.
+Lemma mred_gc_intro : forall body u, moccurs0 body = false -> mred (mESub body u) (lower_m 0 body).
 Proof. intros. apply mred_gc. exact H. Qed.
 
 Print Assumptions of_trm_moccurs.
@@ -312,10 +363,10 @@ Proof.
 Qed.
 
 Lemma mred_full_comp_pure : forall body u,
-  Plus_m mred (mESub (of_trm body) (of_trm u)) (of_trm (open_rec 0 u body)).
+  Plus_m mred (mESub (of_trm body) (of_trm u)) (of_trm (lower 0 (open_rec 0 u body))).
 Proof.
   intros body u.
-  change (Plus_m mred (of_trm (ESub body u)) (of_trm (open_rec 0 u body))).
+  change (Plus_m mred (of_trm (ESub body u)) (of_trm (lower 0 (open_rec 0 u body)))).
   apply Plus_mred_of_Plus_red1. apply lemma_2_2_full_comp.
 Qed.
 

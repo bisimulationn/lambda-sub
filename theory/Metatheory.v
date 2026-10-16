@@ -69,6 +69,26 @@ Proof.
   - rewrite IHt1, IHt2. reflexivity.
 Qed.
 
+Lemma occurs_lift_many_aux : forall t n c k,
+  c <= k -> k < c + n -> occurs k (lift_many n c t) = false.
+Proof.
+  induction t; intros amount c k Hck Hkn; simpl.
+  - destruct (Nat.ltb n c) eqn:E; apply Nat.eqb_neq.
+    + apply Nat.ltb_lt in E. lia.
+    + apply Nat.ltb_ge in E. lia.
+  - reflexivity.
+  - rewrite IHt1, IHt2; lia.
+  - apply IHt; lia.
+  - rewrite IHt1, IHt2; lia.
+Qed.
+
+Lemma occurs_lift_many : forall n t k,
+  k < n -> occurs k (lift_many n 0 t) = false.
+Proof. intros n t k H. apply occurs_lift_many_aux; lia. Qed.
+
+Print Assumptions occurs_lift_many_aux.
+Print Assumptions occurs_lift_many.
+
 Lemma zdecs_nonempty : forall t k, occurs k t = true -> exists C, In C (zdecs t k).
 Proof.
   induction t; intros k H; simpl in *.
@@ -95,7 +115,8 @@ Lemma occurs_count_zfill_plug : forall C k u,
 Proof.
   induction C; intros k u; simpl.
   - rewrite Nat.eqb_refl. simpl.
-    rewrite (occurs_count_false (lift k u) k (occurs_lift_self u k)). reflexivity.
+    rewrite (occurs_count_false (lift_many (S k) 0 u) k
+      (occurs_lift_many (S k) u k (Nat.lt_succ_diag_r k))). reflexivity.
   - rewrite (IHC k u). reflexivity.
   - rewrite (IHC k u). rewrite Nat.add_succ_r. reflexivity.
   - rewrite (IHC (S k) u). reflexivity.
@@ -107,7 +128,8 @@ Lemma open_rec_zplug_lift : forall C k u,
   open_rec k u (zplug_lift C k u) = open_rec k u (zfill C k).
 Proof.
   induction C; intros k u; simpl.
-  - rewrite (open_rec_occurs_false (lift k u) u k (occurs_lift_self u k)).
+  - rewrite (open_rec_occurs_false (lift_many (S k) 0 u) u k
+      (occurs_lift_many (S k) u k (Nat.lt_succ_diag_r k))).
     rewrite Nat.eqb_refl. reflexivity.
   - rewrite (IHC k u). reflexivity.
   - rewrite (IHC k u). reflexivity.
@@ -117,7 +139,7 @@ Proof.
 Qed.
 
 Lemma full_comp_aux : forall n body u, occurs_count 0 body <= n ->
-  Plus red1 (ESub body u) (open_rec 0 u body).
+  Plus red1 (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof.
   induction n as [| n IH]; intros body u Hn.
   - assert (Hc : occurs_count 0 body = 0) by lia.
@@ -138,14 +160,14 @@ Proof.
       apply plus1. exists RGc. apply red1r_root. apply rGc. exact E.
 Qed.
 
-Lemma lemma_2_2_full_comp : forall body u, Plus red1 (ESub body u) (open_rec 0 u body).
+Lemma lemma_2_2_full_comp : forall body u, Plus red1 (ESub body u) (lower 0 (open_rec 0 u body)).
 Proof. intros. apply (full_comp_aux (occurs_count 0 body) body u). lia. Qed.
 
 Lemma fvs_zplug_lift : forall C k u y,
   In y (fvs (zplug_lift C k u)) -> In y (fvs u) \/ In y (fvs (zfill C k)).
 Proof.
   induction C; intros k u y H; simpl in *.
-  - left. rewrite <- (fvs_lift u k). exact H.
+  - left. rewrite <- (fvs_lift_many (S k) u 0). exact H.
   - apply in_app_iff in H as [H|H].
     + destruct (IHC k u y H) as [Hl|Hr]. left; exact Hl.
       right; apply in_app_iff; left; exact Hr.
@@ -188,7 +210,7 @@ Lemma red1_root_fv : forall r t t', red1_root r t t' -> incl (fvs t') (fvs t).
 Proof.
   intros r t t' HR. destruct HR.
   - simpl. unfold incl. intros y Hy. exact Hy.
-  - simpl. unfold incl. intros y Hy. apply in_app_iff. left. exact Hy.
+  - simpl. rewrite fvs_lower. unfold incl. intros y Hy. apply in_app_iff. left. exact Hy.
   - simpl. unfold incl. intros y Hy. apply in_app_iff in Hy as [Hy|Hy].
     + destruct (fvs_zplug_lift C 0 u y Hy) as [Hu|Hb].
       * apply in_app_iff. right. exact Hu.
@@ -207,7 +229,7 @@ Lemma lemma_2_1_fv_preserved : forall t t', red1 t t' -> incl (fvs t') (fvs t).
 Proof. intros t t' [r Hr]. apply red1r_fv with r. exact Hr. Qed.
 
 Inductive beta1 : trm -> trm -> Prop :=
-| beta_root : forall body u, beta1 (App (Lam body) u) (open_rec 0 u body)
+| beta_root : forall body u, beta1 (App (Lam body) u) (lower 0 (open_rec 0 u body))
 | beta_ctx : forall C t t', beta1 t t' -> beta1 (plug C t) (plug C t').
 
 Lemma lemma_2_3_beta_sim : forall a b, beta1 a b -> Plus red1 a b.

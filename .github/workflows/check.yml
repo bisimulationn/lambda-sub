@@ -1,10 +1,14 @@
 name: Check
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   check:
     runs-on: ubuntu-24.04
@@ -15,9 +19,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends graphviz
+      - name: Cache opam dependencies
+        id: opam-cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: |
+            ~/.opam
+            _opam
+          key: opam-${{ runner.os }}-${{ runner.arch }}-4.14.2-${{ hashFiles('.github/workflows/check.yml', 'dune-project') }}
       - uses: ocaml/setup-ocaml@93303b622b2522e4411e295f9e77411a24912ac7
         with:
           ocaml-compiler: 4.14.2
+          cache: ${{ steps.opam-cache.outputs.cache-hit != 'true' }}
       - run: opam install 'dune>=3.21' rocq-prover rocq-stdlib
       - run: opam exec -- dune build @all
       - run: opam exec -- dune build @audit

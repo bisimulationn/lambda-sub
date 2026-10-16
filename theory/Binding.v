@@ -23,6 +23,24 @@ Proof.
   - rewrite IHt1, IHt2. reflexivity.
 Qed.
 
+Lemma fvs_lift_many : forall n t k, fvs (lift_many n k t) = fvs t.
+Proof.
+  intros n t. revert n. induction t; intros nshift k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - apply IHt.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Lemma lift_many_one : forall t k, lift_many 1 k t = lift k t.
+Proof.
+  induction t; intros k; simpl.
+  - destruct (Nat.ltb n k); reflexivity.
+  - reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - rewrite IHt. reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
 Lemma lift_lc : forall t d, lc_at d t -> lift d t = t.
 Proof.
   induction t; intros d H; simpl in *.
@@ -33,10 +51,20 @@ Proof.
   - destruct H as [Ha Hb]. rewrite (IHt1 (S d) Ha), (IHt2 d Hb). reflexivity.
 Qed.
 
+Lemma fvs_lower : forall t k, fvs (lower k t) = fvs t.
+Proof.
+  induction t; intros k; simpl; try reflexivity.
+  - rewrite IHt1, IHt2. reflexivity.
+  - apply IHt.
+  - rewrite IHt1, IHt2. reflexivity.
+Qed.
+
+Print Assumptions fvs_lower.
+
 Lemma lift_0_lc : forall t, lc t -> lift 0 t = t.
 Proof. intros t H. apply lift_lc. exact H. Qed.
 
-Lemma open_rec_bvar : forall k u, open_rec k u (BVar k) = lift k u.
+Lemma open_rec_bvar : forall k u, open_rec k u (BVar k) = lift_many (S k) 0 u.
 Proof. intros. simpl. rewrite Nat.eqb_refl. reflexivity. Qed.
 
 Lemma close_rec_fvar : forall x k, close_rec x k (FVar x) = BVar k.
@@ -98,7 +126,7 @@ Proof.
   induction t; intros u k y H.
   - destruct (Nat.eqb n k) eqn:E.
     + apply Nat.eqb_eq in E. subst n. rewrite (open_rec_bvar k u) in H.
-      left. rewrite <- (fvs_lift u k). exact H.
+      left. rewrite <- (fvs_lift_many (S k) u 0). exact H.
     + apply Nat.eqb_neq in E. rewrite (open_rec_bvar_neq n k u E) in H.
       simpl in H. destruct H.
   - simpl in H. right. exact H.
@@ -128,6 +156,7 @@ Qed.
 Lemma subst_fvar_self : forall x u, lc u -> subst x u (FVar x) = u.
 Proof.
   intros x u Hu. unfold subst. simpl. rewrite Nat.eqb_refl. simpl.
+  rewrite lift_many_one.
   apply lift_0_lc. exact Hu.
 Qed.
 
@@ -155,3 +184,41 @@ Print Assumptions open_close.
 Print Assumptions subst_fvar_self.
 Print Assumptions subst_fvar_other.
 Print Assumptions subst_fvs.
+
+Lemma lift_many_lc_at : forall t amount d k,
+  lc_at d t -> k <= d -> lc_at (amount + d) (lift_many amount k t).
+Proof.
+  induction t; intros amount d k Hlc Hkd; simpl in *.
+  - destruct (Nat.ltb n k) eqn:E.
+    + apply Nat.ltb_lt in E. lia.
+    + lia.
+  - exact I.
+  - destruct Hlc as [Ha Hb]. split; [apply IHt1 | apply IHt2]; assumption.
+  - replace (S (amount + d)) with (amount + S d) by lia.
+    apply IHt; [exact Hlc | lia].
+  - destruct Hlc as [Ha Hb]. split.
+    + replace (S (amount + d)) with (amount + S d) by lia.
+      apply IHt1; [exact Ha | lia].
+    + apply IHt2; assumption.
+Qed.
+
+Lemma lower_lc_at : forall t d k,
+  lc_at (S d) t -> occurs k t = false -> k <= d -> lc_at d (lower k t).
+Proof.
+  induction t; intros d k Hlc Ho Hkd; simpl in *.
+  - apply Nat.eqb_neq in Ho. destruct (Nat.ltb k n) eqn:E.
+    + apply Nat.ltb_lt in E. lia.
+    + apply Nat.ltb_ge in E. lia.
+  - exact I.
+  - destruct Hlc as [Ha Hb]. apply orb_false_iff in Ho as [Hoa Hob].
+    split; [apply IHt1 | apply IHt2]; assumption.
+  - apply IHt; [exact Hlc | exact Ho | lia].
+  - destruct Hlc as [Ha Hb]. apply orb_false_iff in Ho as [Hoa Hob]. split.
+    + apply IHt1; [exact Ha | exact Hoa | lia].
+    + apply IHt2; assumption.
+Qed.
+
+Print Assumptions fvs_lift_many.
+Print Assumptions lift_many_one.
+Print Assumptions lift_many_lc_at.
+Print Assumptions lower_lc_at.

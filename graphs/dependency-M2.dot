@@ -7,9 +7,10 @@ digraph deps {
   ranksep=0.9;
   node [fontname=Inter, fontsize=9];
   edge [fontname=Inter, fontsize=8, color="#000000", fontcolor="#000000", arrowsize=0.6, penwidth=0.8];
-  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="#000000", label=<<B>Theorem dependencies M2, 53 results</B>>];
+  graph [fontname=Inter, fontsize=12, labelloc=t, fontcolor="#000000", label=<<B>Theorem dependencies M2, 55 results</B>>];
   close_rec_notin [label="close_rec_notin\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="close_rec_notin theory/Binding.v proved"];
-  fvs_lift [label="fvs_lift\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="fvs_lift theory/Binding.v proved"];
+  fvs_lift_many [label="fvs_lift_many\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="fvs_lift_many theory/Binding.v proved"];
+  fvs_lower [label="fvs_lower\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="fvs_lower theory/Binding.v proved"];
   has_red_spec [label="has_red_spec\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="has_red_spec theory/Reduction.v proved"];
   open_rec_occurs_false [label="open_rec_occurs_false\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="open_rec_occurs_false theory/Binding.v proved"];
   steps_complete [label="steps_complete\\n(M1)", shape=box, style="rounded,dashed,filled", fillcolor="#ffffff", color="#000000", penwidth=0.9, fontcolor="#000000", tooltip="steps_complete theory/Reduction.v proved"];
@@ -41,6 +42,8 @@ digraph deps {
   occurs_count_pos [label="occurs_count_pos", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_count_pos theory/Metatheory.v proved"];
   occurs_count_zero [label="occurs_count_zero", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_count_zero theory/Metatheory.v proved"];
   occurs_count_zfill_plug [label="occurs_count_zfill_plug", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_count_zfill_plug theory/Metatheory.v proved"];
+  occurs_lift_many [label="occurs_lift_many", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_lift_many theory/Metatheory.v proved"];
+  occurs_lift_many_aux [label="occurs_lift_many_aux", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_lift_many_aux theory/Metatheory.v proved"];
   occurs_lift_self [label="occurs_lift_self", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="occurs_lift_self theory/Metatheory.v proved"];
   open_rec_zplug_lift [label="open_rec_zplug_lift", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="open_rec_zplug_lift theory/Metatheory.v proved"];
   plug_fv_mono [label="plug_fv_mono", shape=ellipse, style="filled", fillcolor="#ffffff", color="#000000", penwidth=1.0, fontcolor="#000000", tooltip="plug_fv_mono theory/Metatheory.v proved"];
@@ -77,9 +80,10 @@ digraph deps {
   steps_sound -> enumerate_sound;
   steps_complete -> enumerate_complete;
   occurs_count_zero -> occurs_count_pos;
+  occurs_lift_many_aux -> occurs_lift_many;
   occurs_count_false -> occurs_count_zfill_plug;
-  occurs_lift_self -> occurs_count_zfill_plug;
-  occurs_lift_self -> open_rec_zplug_lift;
+  occurs_lift_many -> occurs_count_zfill_plug;
+  occurs_lift_many -> open_rec_zplug_lift;
   open_rec_occurs_false -> open_rec_zplug_lift;
   occurs_count_zero -> full_comp_aux;
   occurs_count_zfill_plug -> full_comp_aux;
@@ -88,7 +92,8 @@ digraph deps {
   zdecs_nonempty -> full_comp_aux;
   zdecs_sound -> full_comp_aux;
   full_comp_aux -> lemma_2_2_full_comp;
-  fvs_lift -> fvs_zplug_lift;
+  fvs_lift_many -> fvs_zplug_lift;
+  fvs_lower -> red1_root_fv;
   fvs_zplug_lift -> red1_root_fv;
   plug_fv_mono -> red1r_fv;
   red1_root_fv -> red1r_fv;

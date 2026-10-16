@@ -189,32 +189,32 @@ Qed.
 Lemma s_metavar_empty : s (NMVar 9 []) = 0.
 Proof. reflexivity. Qed.
 
-(* Rule R as currently stated has no freshness side condition on the
-   substituted term, so it creates a loop, which no terminating measure can
-   orient. The step below is derivable with the empty context. The paper
-   excludes it through the convention that no free and bound variable of a
-   term share a name: x[x/u] with x free in u is not an alpha-canonical
-   metaterm. *)
-Lemma nred_R_selfloop : forall x,
-  nred (NESub (NVar x) x (NVar x)) (NESub (NVar x) x (NVar x)).
+Theorem nred_R_selfloop_excluded : forall x,
+  ~ nred (NESub (NVar x) x (NVar x)) (NESub (NVar x) x (NVar x)).
+Proof. intros x. apply nred_selfsub_irreducible. Qed.
+
+Lemma subred_R_fresh : forall x y, x <> y ->
+  subred (NESub (NVar x) x (NVar y)) (NESub (NVar y) x (NVar y)).
+Proof. intros x y Hxy. apply subred_nred. apply nred_R_fresh. exact Hxy. Qed.
+
+Example freshened_selfsub_reaches_variable :
+  StarN nred (freshen_substitutions [] (NESub (NVar 0) 0 (NVar 0))) (NVar 0).
 Proof.
-  intro x. apply nred_R with (C := nHole) (phi := [x]).
-  - simpl. left. reflexivity.
-  - intros y Hy. simpl in Hy. destruct Hy as [Hy|[]]. subst y. simpl. left. reflexivity.
-  - reflexivity.
+  apply StarN_one_trans with (b := NESub (NVar 0) 1 (NVar 0)).
+  - apply freshened_R_progress.
+  - apply StarN_one_trans with (b := NVar 0).
+    + apply nred_Gc. simpl. intros [H | []]. discriminate H.
+    + apply starN_refl.
 Qed.
 
-Theorem current_sm_not_terminating : exists t, nred t t.
-Proof. exists (NESub (NVar 0) 0 (NVar 0)). apply nred_R_selfloop. Qed.
-
-(* Consequence for Es: the modulo relation subred inherits the loop, so it
-   is not terminating either without the freshness invariant. *)
-Lemma subred_selfloop : forall x,
-  subred (NESub (NVar x) x (NVar x)) (NESub (NVar x) x (NVar x)).
-Proof. intro x. apply subred_nred. apply nred_R_selfloop. Qed.
-
-Theorem current_subred_not_terminating : exists t, subred t t.
-Proof. exists (NESub (NVar 0) 0 (NVar 0)). apply subred_selfloop. Qed.
+Example named_beta_identity_same_name :
+  StarN nred (NApp (NLam 0 (NVar 0)) (NVar 0)) (NVar 0).
+Proof.
+  apply StarN_one_trans with
+    (b := freshen_substitutions [] (NESub (NVar 0) 0 (NVar 0))).
+  - apply beta_freshens_substitution.
+  - apply freshened_selfsub_reaches_variable.
+Qed.
 
 Print Assumptions Mx_fresh_fails.
 Print Assumptions A1_C_related.
@@ -224,7 +224,7 @@ Print Assumptions A1_not_invariant.
 Print Assumptions Gc_special_nondecrease.
 Print Assumptions nred_Gc_special.
 Print Assumptions s_metavar_empty.
-Print Assumptions nred_R_selfloop.
-Print Assumptions current_sm_not_terminating.
-Print Assumptions subred_selfloop.
-Print Assumptions current_subred_not_terminating.
+Print Assumptions nred_R_selfloop_excluded.
+Print Assumptions subred_R_fresh.
+Print Assumptions freshened_selfsub_reaches_variable.
+Print Assumptions named_beta_identity_same_name.
